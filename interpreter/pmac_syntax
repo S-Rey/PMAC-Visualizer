@@ -1,0 +1,42 @@
+
+ => DO NOT USE Q-VARS BELOW Q100 - THESE ARE SYSTEM RESERVED (as follows):
+  Q0        : default argument for ARCTAN2 function in kinematic subroutines
+  Q1-Q9     : automatic read axis positions for kinematic subroutines
+  Q11-Q19   : automatic read axis velocity for kinematic subroutines (PVT moves ONLY)
+  Q20-Q100  : system reserved for various functions (see config PMC files)
+
+ => DO NOT USE Q-VARS LISTED HERE - GLOBAL VARIABLES
+  Q101..Q109 : Reserved for temporary storage
+  Q110..Q119 : Reserved for the repeat loop function
+  Q120..Q122 : Reserved for tilt
+  Q130..Q132 : Reserved for specific platform rotation + tilt
+  Q137..Q139 : Reserved for user rotation + platform rotation + tilt
+  Q140..Q148 : Reserved for the RotationAxis function
+  Q150..Q152 : Reserved for motor scaling
+  Q161       : Reserved for power correction percentage
+  Q162       : Reserved for power correction flag
+  Q163..Q164 : Reserved for repeat loops (where the increment needs to be used)
+  Q300..Q301 : Reserved for power correction temporary storage
+  Q410..Q559 : Reserved for position saving
+  Q800       : Reserved for PI value = 4*ATAN(1)
+  Q801..     : Reserved for variable allocation
+
+ => DO NOT USE P-VARS BELOW P218 - THESE ARE SYSTEM RESERVED (as follows):
+  P1-P32    : set axis positions for kinematic subroutines
+  P101-P132 : set axis velocity for kinematic subroutines
+  P211-P217 : read actual axis positions (for user interface)
+  P100-P107 : motor scaling values used in position reporting (NOT used for coordinate system scaling and definition!
+  Other P vars up to P218 : see PMC config files
+  P410..P609: Used for XYZ position recording
+  P610..P660: Used for Table position recording
+  P700      : Used for storing the home position of the power motor
+
+
+Command 1:
+
+Line dx,dy,dz
+    Linear;
+    Inc;
+    I15=1;
+    Q300=Q161+(-0.020*(10))
+    
