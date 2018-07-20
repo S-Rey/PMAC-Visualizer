@@ -1,55 +1,12 @@
 grammar PMAC;
 
-//
-//input
-//    : setVar NL input     # ToSetVar
-//    | plusOrMinus NL? EOF # Calculate
-//    ;
-//
-//setVar
-//    : ID EQUAL plusOrMinus # SetVariable
-//    ;
-//
-//
-//plusOrMinus 
-//    : plusOrMinus PLUS multOrDiv  # Plus
-//    | plusOrMinus MINUS multOrDiv # Minus
-//    | multOrDiv                   # ToMultOrDiv
-//    ;
-//
-//multOrDiv
-//    : multOrDiv MULT pow # Multiplication
-//    | multOrDiv DIV pow  # Division
-//    | pow                # ToPow
-//    ;
-//
-//pow
-//    : unaryMinus (POW pow)? # Power
-//    ;
-//
-//unaryMinus
-//    : MINUS unaryMinus # ChangeSign
-//    | atom             # ToAtom
-//    ;
-//
-//atom
-//    : INTEGER               
-//    | DECIMAL
-//    | ID                    # Variable
-//    | LPAR plusOrMinus RPAR # Braces
-//;
-
 program
-	: line*
+	: (lines+=line)* EOF
 	;
 
 line
-	: statement
-	;
-
-statement
 	: assign
-	;
+    ;
 
 assign
 	: var EQ expr
@@ -62,9 +19,6 @@ expr
 	| expr MULT	expr
 	| expr DIV 	expr
 	| atom
-	//| substraction
-	//| multiplication
-	//| division
 	;
 
 	
