@@ -23,6 +23,10 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual antlrcpp::Any visitStatement(PMACParser::StatementContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual antlrcpp::Any visitAssign(PMACParser::AssignContext *ctx) override {
     return visitChildren(ctx);
   }

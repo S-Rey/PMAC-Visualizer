@@ -1,0 +1,37 @@
+[
+{
+  "directory": "/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/build",
+  "command": "/usr/bin/c++   -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/antlr4-runtime -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/antlr4-runtime/misc -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/antlr4-runtime/atn -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/antlr4-runtime/dfa -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/antlr4-runtime/tree -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/antlr4-runtime/support -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/libs     -Wno-overloaded-virtual -o CMakeFiles/antlr4-tutorial.dir/interpreter.cpp.o -c /home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/interpreter.cpp",
+  "file": "/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/interpreter.cpp"
+},
+{
+  "directory": "/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/build",
+  "command": "/usr/bin/c++   -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/antlr4-runtime -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/antlr4-runtime/misc -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/antlr4-runtime/atn -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/antlr4-runtime/dfa -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/antlr4-runtime/tree -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/antlr4-runtime/support -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/libs     -Wno-overloaded-virtual -o CMakeFiles/antlr4-tutorial.dir/Visitor.cpp.o -c /home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/Visitor.cpp",
+  "file": "/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/Visitor.cpp"
+},
+{
+  "directory": "/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/build",
+  "command": "/usr/bin/c++   -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/antlr4-runtime -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/antlr4-runtime/misc -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/antlr4-runtime/atn -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/antlr4-runtime/dfa -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/antlr4-runtime/tree -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/antlr4-runtime/support -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/libs     -Wno-overloaded-virtual -o CMakeFiles/antlr4-tutorial.dir/Environment.cpp.o -c /home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/Environment.cpp",
+  "file": "/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/Environment.cpp"
+},
+{
+  "directory": "/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/build",
+  "command": "/usr/bin/c++   -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/antlr4-runtime -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/antlr4-runtime/misc -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/antlr4-runtime/atn -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/antlr4-runtime/dfa -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/antlr4-runtime/tree -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/antlr4-runtime/support -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/libs     -Wno-overloaded-virtual -o CMakeFiles/antlr4-tutorial.dir/antlr4-runtime/PMACLexer.cpp.o -c /home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/antlr4-runtime/PMACLexer.cpp",
+  "file": "/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/antlr4-runtime/PMACLexer.cpp"
+},
+{
+  "directory": "/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/build",
+  "command": "/usr/bin/c++   -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/antlr4-runtime -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/antlr4-runtime/misc -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/antlr4-runtime/atn -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/antlr4-runtime/dfa -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/antlr4-runtime/tree -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/antlr4-runtime/support -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/libs     -Wno-overloaded-virtual -o CMakeFiles/antlr4-tutorial.dir/antlr4-runtime/PMACParser.cpp.o -c /home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/antlr4-runtime/PMACParser.cpp",
+  "file": "/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/antlr4-runtime/PMACParser.cpp"
+},
+{
+  "directory": "/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/build",
+  "command": "/usr/bin/c++   -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/antlr4-runtime -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/antlr4-runtime/misc -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/antlr4-runtime/atn -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/antlr4-runtime/dfa -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/antlr4-runtime/tree -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/antlr4-runtime/support -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/libs     -Wno-overloaded-virtual -o CMakeFiles/antlr4-tutorial.dir/antlr4-runtime/PMACBaseVisitor.cpp.o -c /home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/antlr4-runtime/PMACBaseVisitor.cpp",
+  "file": "/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/antlr4-runtime/PMACBaseVisitor.cpp"
+},
+{
+  "directory": "/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/build",
+  "command": "/usr/bin/c++   -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/antlr4-runtime -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/antlr4-runtime/misc -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/antlr4-runtime/atn -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/antlr4-runtime/dfa -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/antlr4-runtime/tree -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/antlr4-runtime/support -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter -I/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/libs     -Wno-overloaded-virtual -o CMakeFiles/antlr4-tutorial.dir/antlr4-runtime/PMACVisitor.cpp.o -c /home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/antlr4-runtime/PMACVisitor.cpp",
+  "file": "/home/samuel/GALATEA/PMAC-OpenGL-Visualizer/interpreter/antlr4-runtime/PMACVisitor.cpp"
+}
+]

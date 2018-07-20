@@ -23,6 +23,8 @@ public:
 
     virtual antlrcpp::Any visitLine(PMACParser::LineContext *context) = 0;
 
+    virtual antlrcpp::Any visitStatement(PMACParser::StatementContext *context) = 0;
+
     virtual antlrcpp::Any visitAssign(PMACParser::AssignContext *context) = 0;
 
     virtual antlrcpp::Any visitExpr(PMACParser::ExprContext *context) = 0;

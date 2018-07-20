@@ -17,8 +17,8 @@ public:
   };
 
   enum {
-    RuleProgram = 0, RuleLine = 1, RuleAssign = 2, RuleExpr = 3, RuleAtom = 4, 
-    RuleNumber = 5, RuleVar = 6
+    RuleProgram = 0, RuleLine = 1, RuleStatement = 2, RuleAssign = 3, RuleExpr = 4, 
+    RuleAtom = 5, RuleNumber = 6, RuleVar = 7
   };
 
   PMACParser(antlr4::TokenStream *input);
@@ -33,6 +33,7 @@ public:
 
   class ProgramContext;
   class LineContext;
+  class StatementContext;
   class AssignContext;
   class ExprContext;
   class AtomContext;
@@ -41,15 +42,10 @@ public:
 
   class  ProgramContext : public antlr4::ParserRuleContext {
   public:
-    PMACParser::LineContext *lineContext = nullptr;;
-    std::vector<LineContext *> lines;;
     ProgramContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    antlr4::tree::TerminalNode *EOF();
     std::vector<LineContext *> line();
     LineContext* line(size_t i);
-    std::vector<antlr4::tree::TerminalNode *> NL();
-    antlr4::tree::TerminalNode* NL(size_t i);
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
@@ -61,13 +57,25 @@ public:
   public:
     LineContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    AssignContext *assign();
+    StatementContext *statement();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
   };
 
   LineContext* line();
+
+  class  StatementContext : public antlr4::ParserRuleContext {
+  public:
+    StatementContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    AssignContext *assign();
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  StatementContext* statement();
 
   class  AssignContext : public antlr4::ParserRuleContext {
   public:
@@ -85,20 +93,15 @@ public:
 
   class  ExprContext : public antlr4::ParserRuleContext {
   public:
-    PMACParser::ExprContext *leftExpr = nullptr;;
-    PMACParser::ExprContext *centExpr = nullptr;;
-    PMACParser::ExprContext *minExpr = nullptr;;
-    antlr4::Token *op = nullptr;;
-    PMACParser::ExprContext *rightExpr = nullptr;;
     ExprContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *LPAR();
-    antlr4::tree::TerminalNode *RPAR();
     std::vector<ExprContext *> expr();
     ExprContext* expr(size_t i);
-    antlr4::tree::TerminalNode *MIN();
+    antlr4::tree::TerminalNode *RPAR();
     AtomContext *atom();
     antlr4::tree::TerminalNode *PLUS();
+    antlr4::tree::TerminalNode *MIN();
     antlr4::tree::TerminalNode *MULT();
     antlr4::tree::TerminalNode *DIV();
 
