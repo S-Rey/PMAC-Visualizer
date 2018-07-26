@@ -15,6 +15,7 @@ line
 statement
     : action                                        // setting variable
     | ifStatement
+    | whileStatement
     ;
 
 action
@@ -27,6 +28,12 @@ ifStatement
     | IF LPAR condition RPAR NL (ifLines+=line)+
       (ELSE elseAction=action NL | ELSE NL (elseLines+=line)+)?
       ENDIF
+    ;
+
+whileStatement
+    : WHILE LPAR condition RPAR
+        (whileAction=action
+        | NL (whileLines+=line)+ ENDWHILE)
     ;
 
 data

@@ -26,6 +26,8 @@ antlrcpp::Any Visitor::visitStatement(PMACParser::StatementContext *ctx) {
         this->visitAction(ctx->action());
     } else if (ctx->ifStatement()) {
         this->visitIfStatement(ctx->ifStatement());
+    } else if (ctx->whileStatement()) {
+        this->visitWhileStatement(ctx->whileStatement());
     }
     return antlrcpp::Any();
 }
@@ -61,7 +63,24 @@ antlrcpp::Any Visitor::visitIfStatement(PMACParser::IfStatementContext *ctx) {
             }
         }
     } else {
-        throw std::invalid_argument("If statement expected at this line");
+        throw std::invalid_argument("IF statement expected at this line");
+    }
+    return antlrcpp::Any();
+}
+
+antlrcpp::Any Visitor::visitWhileStatement(PMACParser::WhileStatementContext *ctx) {
+    if (ctx->WHILE()) {
+        while (this->visitCondition(ctx->condition()).as<bool>()) {
+            if(ctx->whileAction) {
+                this->visitAction(ctx->whileAction);
+            } else if (!ctx->whileLines.empty()) {
+                for (auto line : ctx->whileLines) this->visitLine(line);
+            } else {
+                throw std::invalid_argument("Action or lines expected");
+            }
+        }
+    } else {
+        throw std::invalid_argument("WHILE statement expected at this line");
     }
     return antlrcpp::Any();
 }
@@ -72,7 +91,7 @@ antlrcpp::Any Visitor::visitAssign(PMACParser::AssignContext *ctx) {
     if (result.isNotNull()) {
         // set variable to the result value
         this->env.setVariable(ctx->var()->getText(), result.as<double>());
-        std::cout << ctx->var()->getText() << " = " << result.as<double>() << std::endl;
+        std::cout << ctx->var()->getText() << " = " << result.as<double>() << std::endl << std::flush;
     } else {
         throw std::invalid_argument("Assign null expression to variable " + ctx->var()->getText());
     }
@@ -155,8 +174,3 @@ antlrcpp::Any Visitor::visitNumber(PMACParser::NumberContext *ctx) {
 antlrcpp::Any Visitor::visitVar(PMACParser::VarContext *ctx) {
     return PMACBaseVisitor::visitVar(ctx);
 }
-
-
-
-
-

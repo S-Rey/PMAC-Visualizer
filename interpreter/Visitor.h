@@ -10,6 +10,7 @@ public:
     antlrcpp::Any visitStatement(PMACParser::StatementContext*ctx) override;
     antlrcpp::Any visitAction(PMACParser::ActionContext *ctx) override;
     antlrcpp::Any visitIfStatement(PMACParser::IfStatementContext *ctx) override;
+    antlrcpp::Any visitWhileStatement(PMACParser::WhileStatementContext *ctx) override;
     antlrcpp::Any visitAssign(PMACParser::AssignContext *ctx) override;
     antlrcpp::Any visitExpr(PMACParser::ExprContext *ctx) override;
     antlrcpp::Any visitCondition(PMACParser::ConditionContext *ctx) override;

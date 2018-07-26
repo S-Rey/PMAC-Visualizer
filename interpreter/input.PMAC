@@ -1,7 +1,2 @@
-q1 = 12
-if (1 > 2)
-    q2 = 2
-else
-    q2 = 3
-    if (q1 = 12) q2 = 4
-endif
+q1 = 0
+while (q1 < 100) q1 = q1 + 1

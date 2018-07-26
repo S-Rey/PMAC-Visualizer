@@ -29,6 +29,8 @@ public:
 
     virtual antlrcpp::Any visitIfStatement(PMACParser::IfStatementContext *context) = 0;
 
+    virtual antlrcpp::Any visitWhileStatement(PMACParser::WhileStatementContext *context) = 0;
+
     virtual antlrcpp::Any visitData(PMACParser::DataContext *context) = 0;
 
     virtual antlrcpp::Any visitConstant(PMACParser::ConstantContext *context) = 0;

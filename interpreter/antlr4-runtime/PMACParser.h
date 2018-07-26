@@ -26,9 +26,9 @@ public:
 
   enum {
     RuleProgram = 0, RuleLine = 1, RuleStatement = 2, RuleAction = 3, RuleIfStatement = 4, 
-    RuleData = 5, RuleConstant = 6, RuleAssign = 7, RuleExpr = 8, RuleCondition = 9, 
-    RuleOp = 10, RuleComparator = 11, RuleAxis = 12, RuleAtom = 13, RuleNumber = 14, 
-    RuleVar = 15, RuleFunction = 16
+    RuleWhileStatement = 5, RuleData = 6, RuleConstant = 7, RuleAssign = 8, 
+    RuleExpr = 9, RuleCondition = 10, RuleOp = 11, RuleComparator = 12, 
+    RuleAxis = 13, RuleAtom = 14, RuleNumber = 15, RuleVar = 16, RuleFunction = 17
   };
 
   PMACParser(antlr4::TokenStream *input);
@@ -46,6 +46,7 @@ public:
   class StatementContext;
   class ActionContext;
   class IfStatementContext;
+  class WhileStatementContext;
   class DataContext;
   class ConstantContext;
   class AssignContext;
@@ -94,6 +95,7 @@ public:
     virtual size_t getRuleIndex() const override;
     ActionContext *action();
     IfStatementContext *ifStatement();
+    WhileStatementContext *whileStatement();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
@@ -143,6 +145,29 @@ public:
   };
 
   IfStatementContext* ifStatement();
+
+  class  WhileStatementContext : public antlr4::ParserRuleContext {
+  public:
+    PMACParser::ActionContext *whileAction = nullptr;;
+    PMACParser::LineContext *lineContext = nullptr;;
+    std::vector<LineContext *> whileLines;;
+    WhileStatementContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *WHILE();
+    antlr4::tree::TerminalNode *LPAR();
+    ConditionContext *condition();
+    antlr4::tree::TerminalNode *RPAR();
+    antlr4::tree::TerminalNode *NL();
+    antlr4::tree::TerminalNode *ENDWHILE();
+    ActionContext *action();
+    std::vector<LineContext *> line();
+    LineContext* line(size_t i);
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  WhileStatementContext* whileStatement();
 
   class  DataContext : public antlr4::ParserRuleContext {
   public:
