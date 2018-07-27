@@ -214,6 +214,7 @@ public:
     PMACParser::ExprContext *left = nullptr;;
     PMACParser::ExprContext *center = nullptr;;
     PMACParser::ExprContext *minExpr = nullptr;;
+    PMACParser::ExprContext *arg = nullptr;;
     PMACParser::ExprContext *right = nullptr;;
     ExprContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;

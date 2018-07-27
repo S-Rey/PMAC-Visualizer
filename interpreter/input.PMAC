@@ -1,2 +1,3 @@
-q1 = 0
-while (q1 < 100) q1 = q1 + 1
+i15 = 1
+;q1 = exp (ln(sin(asin(1))))
+q1 = acos(3.14)

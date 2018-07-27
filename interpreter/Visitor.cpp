@@ -102,7 +102,7 @@ antlrcpp::Any Visitor::visitExpr(PMACParser::ExprContext *ctx) {
     // if atom -> return its value
     if (ctx->atom()) return this->visitAtom(ctx->atom());
     // '(' expr ')'
-    if (ctx->LPAR() && ctx->RPAR()) return this->visitExpr(ctx->center);
+    if (ctx->LPAR() && ctx->RPAR() && ctx->center) return this->visitExpr(ctx->center);
     // MIN expr
     if (ctx->minExpr) {
        return antlrcpp::Any(-(this->visitExpr(ctx->minExpr).as<double>()));
@@ -128,6 +128,61 @@ antlrcpp::Any Visitor::visitExpr(PMACParser::ExprContext *ctx) {
                 return antlrcpp::Any(left / right);
             }
         }
+    }
+
+    // function '(' expr ')'
+    if (ctx->LPAR() && ctx->LPAR() && ctx->function() && ctx->arg) {
+        double argument = this->visitExpr(ctx->arg).as<double>();
+
+        // Standard functions
+        if (ctx->function()->LN()) {
+            return antlrcpp::Any(std::log(argument));
+        } else if (ctx->function()->EXP()) {
+            return antlrcpp::Any(std::exp(argument));
+        } else if (ctx->function()->SQRT()) {
+            if (argument >= 0.0) {
+                return antlrcpp::Any(std::sqrt(argument));
+            } else {
+                throw std::invalid_argument("SQRT() must have a positive argument. "
+                                            "Argument value:" + std::to_string(argument));
+            }
+        } else if (ctx->function()->ABS()) {
+            return antlrcpp::Any(std::abs(argument));
+        } else if (ctx->function()->INT()) {
+            return antlrcpp::Any(std::floor(argument));
+        }
+
+
+        // Trigonometric functions
+        double rad = argument;
+        double angle = 0.0;
+        // convert the input argument rad to degree if i15 == 0
+        if (this->env.getValue("i15") == 0.0) {
+            rad = argument / 180.0 * M_PI;
+        }
+        if (ctx->function()->SIN()) {
+            return antlrcpp::Any(std::sin(rad));
+        } else if (ctx->function()->COS()) {
+            return antlrcpp::Any(std::cos(rad));
+        } else if (ctx->function()->TAN()) {
+            return antlrcpp::Any(std::tan(rad));
+        } else if (ctx->function()->ASIN()) {
+            angle = std::asin(argument);
+        } else if (ctx->function()->ACOS()) {
+            angle = std::acos(argument);
+        } else if (ctx->function()->ATAN()) {
+            angle = std::atan(argument);
+        } else if (ctx->function()->ATAN2()) {
+            double cos_val = this->env.getValue("q0");
+            if ((argument == 0.0) && (cos_val == 0))
+                throw std::invalid_argument("ATAN 2, both argument are equal to zero");
+            angle = std::atan2(argument, cos_val);
+        }
+        // convert the angle result back to degree if i15 == 0
+        if (this->env.getValue("i15") == 0.0) {
+            angle = angle / M_PI * 180.0;
+        }
+        return antlrcpp::Any(angle);
     }
     return antlrcpp::Any();
 }

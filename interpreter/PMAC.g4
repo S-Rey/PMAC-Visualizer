@@ -53,7 +53,7 @@ expr
     : LPAR center=expr RPAR
     | left=expr op right=expr
     | MIN minExpr=expr
-    | function LPAR center=expr RPAR
+    | function LPAR arg=expr RPAR
     | atom
     ;
 

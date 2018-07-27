@@ -928,7 +928,7 @@ PMACParser::ExprContext* PMACParser::expr(int precedence) {
         setState(135);
         match(PMACParser::LPAR);
         setState(136);
-        dynamic_cast<ExprContext *>(_localctx)->center = expr(0);
+        dynamic_cast<ExprContext *>(_localctx)->arg = expr(0);
         setState(137);
         match(PMACParser::RPAR);
         break;

@@ -6,6 +6,7 @@ project("PMAC-Interpreter")
 
 # To use PKG_CHECK_MODULES to find some optional packages
 find_package(PkgConfig)
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -Wall")
 
 ### Not sure yet if it is useful ###
 if(NOT WIN32)

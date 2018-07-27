@@ -2,6 +2,7 @@
 #include "antlr4-runtime/PMACBaseVisitor.h"
 #include "Environment.h"
 #include <string>
+#include <cmath>
 
 class  Visitor : PMACBaseVisitor {
 public:
