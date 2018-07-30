@@ -26,8 +26,8 @@ public:
 
   enum {
     RuleProgram = 0, RuleLine = 1, RuleStatement = 2, RuleAction = 3, RuleIfStatement = 4, 
-    RuleWhileStatement = 5, RuleData = 6, RuleConstant = 7, RuleAssign = 8, 
-    RuleExpr = 9, RuleCondition = 10, RuleOp = 11, RuleComparator = 12, 
+    RuleWhileStatement = 5, RuleCompoundCondition = 6, RuleCondition = 7, 
+    RuleData = 8, RuleConstant = 9, RuleAssign = 10, RuleExpr = 11, RuleComparator = 12, 
     RuleAxis = 13, RuleAtom = 14, RuleNumber = 15, RuleVar = 16, RuleFunction = 17
   };
 
@@ -47,12 +47,12 @@ public:
   class ActionContext;
   class IfStatementContext;
   class WhileStatementContext;
+  class CompoundConditionContext;
+  class ConditionContext;
   class DataContext;
   class ConstantContext;
   class AssignContext;
   class ExprContext;
-  class ConditionContext;
-  class OpContext;
   class ComparatorContext;
   class AxisContext;
   class AtomContext;
@@ -122,21 +122,20 @@ public:
   class  IfStatementContext : public antlr4::ParserRuleContext {
   public:
     PMACParser::ActionContext *ifAction = nullptr;;
+    PMACParser::ActionContext *elseAction = nullptr;;
     PMACParser::LineContext *lineContext = nullptr;;
     std::vector<LineContext *> ifLines;;
-    PMACParser::ActionContext *elseAction = nullptr;;
     std::vector<LineContext *> elseLines;;
     IfStatementContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *IF();
-    antlr4::tree::TerminalNode *LPAR();
-    ConditionContext *condition();
-    antlr4::tree::TerminalNode *RPAR();
-    ActionContext *action();
+    CompoundConditionContext *compoundCondition();
+    std::vector<ActionContext *> action();
+    ActionContext* action(size_t i);
     std::vector<antlr4::tree::TerminalNode *> NL();
     antlr4::tree::TerminalNode* NL(size_t i);
-    antlr4::tree::TerminalNode *ENDIF();
     antlr4::tree::TerminalNode *ELSE();
+    antlr4::tree::TerminalNode *ENDIF();
     std::vector<LineContext *> line();
     LineContext* line(size_t i);
 
@@ -154,9 +153,7 @@ public:
     WhileStatementContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     antlr4::tree::TerminalNode *WHILE();
-    antlr4::tree::TerminalNode *LPAR();
-    ConditionContext *condition();
-    antlr4::tree::TerminalNode *RPAR();
+    CompoundConditionContext *compoundCondition();
     antlr4::tree::TerminalNode *NL();
     antlr4::tree::TerminalNode *ENDWHILE();
     ActionContext *action();
@@ -168,6 +165,45 @@ public:
   };
 
   WhileStatementContext* whileStatement();
+
+  class  CompoundConditionContext : public antlr4::ParserRuleContext {
+  public:
+    PMACParser::CompoundConditionContext *left = nullptr;;
+    PMACParser::CompoundConditionContext *center = nullptr;;
+    antlr4::Token *logicalOp = nullptr;;
+    PMACParser::CompoundConditionContext *right = nullptr;;
+    CompoundConditionContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *LPAR();
+    antlr4::tree::TerminalNode *RPAR();
+    std::vector<CompoundConditionContext *> compoundCondition();
+    CompoundConditionContext* compoundCondition(size_t i);
+    ConditionContext *condition();
+    antlr4::tree::TerminalNode *AND();
+    antlr4::tree::TerminalNode *NL();
+    antlr4::tree::TerminalNode *OR();
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  CompoundConditionContext* compoundCondition();
+  CompoundConditionContext* compoundCondition(int precedence);
+  class  ConditionContext : public antlr4::ParserRuleContext {
+  public:
+    PMACParser::ExprContext *left = nullptr;;
+    PMACParser::ExprContext *right = nullptr;;
+    ConditionContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    ComparatorContext *comparator();
+    std::vector<ExprContext *> expr();
+    ExprContext* expr(size_t i);
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  ConditionContext* condition();
 
   class  DataContext : public antlr4::ParserRuleContext {
   public:
@@ -213,8 +249,9 @@ public:
   public:
     PMACParser::ExprContext *left = nullptr;;
     PMACParser::ExprContext *center = nullptr;;
+    PMACParser::ExprContext *argument = nullptr;;
     PMACParser::ExprContext *minExpr = nullptr;;
-    PMACParser::ExprContext *arg = nullptr;;
+    antlr4::Token *op = nullptr;;
     PMACParser::ExprContext *right = nullptr;;
     ExprContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
@@ -222,10 +259,16 @@ public:
     antlr4::tree::TerminalNode *RPAR();
     std::vector<ExprContext *> expr();
     ExprContext* expr(size_t i);
-    antlr4::tree::TerminalNode *MIN();
     FunctionContext *function();
+    antlr4::tree::TerminalNode *MIN();
     AtomContext *atom();
-    OpContext *op();
+    antlr4::tree::TerminalNode *MULT();
+    antlr4::tree::TerminalNode *DIV();
+    antlr4::tree::TerminalNode *MOD();
+    antlr4::tree::TerminalNode *PLUS();
+    antlr4::tree::TerminalNode *AND_OP();
+    antlr4::tree::TerminalNode *XOR();
+    antlr4::tree::TerminalNode *OR_OP();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
    
@@ -233,41 +276,6 @@ public:
 
   ExprContext* expr();
   ExprContext* expr(int precedence);
-  class  ConditionContext : public antlr4::ParserRuleContext {
-  public:
-    PMACParser::ExprContext *left = nullptr;;
-    PMACParser::ExprContext *right = nullptr;;
-    ConditionContext(antlr4::ParserRuleContext *parent, size_t invokingState);
-    virtual size_t getRuleIndex() const override;
-    ComparatorContext *comparator();
-    std::vector<ExprContext *> expr();
-    ExprContext* expr(size_t i);
-
-    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-   
-  };
-
-  ConditionContext* condition();
-
-  class  OpContext : public antlr4::ParserRuleContext {
-  public:
-    OpContext(antlr4::ParserRuleContext *parent, size_t invokingState);
-    virtual size_t getRuleIndex() const override;
-    antlr4::tree::TerminalNode *PLUS();
-    antlr4::tree::TerminalNode *MIN();
-    antlr4::tree::TerminalNode *MULT();
-    antlr4::tree::TerminalNode *DIV();
-    antlr4::tree::TerminalNode *MOD();
-    antlr4::tree::TerminalNode *AND_OP();
-    antlr4::tree::TerminalNode *OR_OP();
-    antlr4::tree::TerminalNode *XOR();
-
-    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-   
-  };
-
-  OpContext* op();
-
   class  ComparatorContext : public antlr4::ParserRuleContext {
   public:
     ComparatorContext(antlr4::ParserRuleContext *parent, size_t invokingState);
@@ -373,6 +381,7 @@ public:
 
   virtual bool sempred(antlr4::RuleContext *_localctx, size_t ruleIndex, size_t predicateIndex) override;
   bool actionSempred(ActionContext *_localctx, size_t predicateIndex);
+  bool compoundConditionSempred(CompoundConditionContext *_localctx, size_t predicateIndex);
   bool exprSempred(ExprContext *_localctx, size_t predicateIndex);
 
 private:

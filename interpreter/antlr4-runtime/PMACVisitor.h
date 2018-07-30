@@ -31,6 +31,10 @@ public:
 
     virtual antlrcpp::Any visitWhileStatement(PMACParser::WhileStatementContext *context) = 0;
 
+    virtual antlrcpp::Any visitCompoundCondition(PMACParser::CompoundConditionContext *context) = 0;
+
+    virtual antlrcpp::Any visitCondition(PMACParser::ConditionContext *context) = 0;
+
     virtual antlrcpp::Any visitData(PMACParser::DataContext *context) = 0;
 
     virtual antlrcpp::Any visitConstant(PMACParser::ConstantContext *context) = 0;
@@ -38,10 +42,6 @@ public:
     virtual antlrcpp::Any visitAssign(PMACParser::AssignContext *context) = 0;
 
     virtual antlrcpp::Any visitExpr(PMACParser::ExprContext *context) = 0;
-
-    virtual antlrcpp::Any visitCondition(PMACParser::ConditionContext *context) = 0;
-
-    virtual antlrcpp::Any visitOp(PMACParser::OpContext *context) = 0;
 
     virtual antlrcpp::Any visitComparator(PMACParser::ComparatorContext *context) = 0;
 

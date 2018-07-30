@@ -1,6 +1,7 @@
 grammar PMAC;
 
 
+
 ///////////////// PARSER /////////////////
 
 program
@@ -24,16 +25,28 @@ action
     ;
 
 ifStatement
-    : IF LPAR condition RPAR ifAction=action        // single line action
-    | IF LPAR condition RPAR NL (ifLines+=line)+
+    : IF compoundCondition ifAction=action        // single line action
+      (NL ELSE elseAction=action)?
+    | IF compoundCondition NL (ifLines+=line)+
       (ELSE elseAction=action NL | ELSE NL (elseLines+=line)+)?
       ENDIF
     ;
 
 whileStatement
-    : WHILE LPAR condition RPAR
+    : WHILE compoundCondition
         (whileAction=action
-        | NL (whileLines+=line)+ ENDWHILE)
+        |NL (whileLines+=line)+ ENDWHILE)
+    ;
+
+compoundCondition
+    : LPAR center=compoundCondition RPAR
+    | left=compoundCondition NL? logicalOp=AND right=compoundCondition // AND has higher precedence than OR
+    | left=compoundCondition NL? logicalOp=OR  right=compoundCondition
+    | condition
+    ;
+
+condition
+    : left=expr comparator right=expr
     ;
 
 data
@@ -51,25 +64,14 @@ assign
 
 expr
     : LPAR center=expr RPAR
-    | left=expr op right=expr
+    | function LPAR argument=expr RPAR
+    | left=expr op=(MULT | DIV | MOD) right=expr
+    | left=expr op=(PLUS | MIN)       right=expr
+    | left=expr op=AND_OP             right=expr
+    | left=expr op=XOR                right=expr
+    | left=expr op=OR_OP              right=expr
     | MIN minExpr=expr
-    | function LPAR arg=expr RPAR
     | atom
-    ;
-
-condition
-    : left=expr comparator right=expr
-    ;
-
-op
-    : PLUS
-    | MIN
-    | MULT
-    | DIV
-    | MOD
-    | AND_OP
-    | OR_OP
-    | XOR
     ;
 
 comparator

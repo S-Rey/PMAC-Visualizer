@@ -46,7 +46,7 @@ antlrcpp::Any Visitor::visitAction(PMACParser::ActionContext *ctx) {
 
 antlrcpp::Any Visitor::visitIfStatement(PMACParser::IfStatementContext *ctx) {
     if (ctx->IF()) {
-        bool condition = this->visitCondition(ctx->condition()).as<bool>();
+        bool condition = this->visitCompoundCondition(ctx->compoundCondition()).as<bool>();
         if (condition) {
             if (ctx->ifAction) {
                 this->visitAction(ctx->ifAction);
@@ -54,11 +54,13 @@ antlrcpp::Any Visitor::visitIfStatement(PMACParser::IfStatementContext *ctx) {
                 for (auto line : ctx->ifLines) this->visitLine(line);
             }
         } else {
-            if (ctx->ELSE() && ctx->ENDIF()) {
-                if (ctx->elseAction) {
-                    this->visitAction(ctx->elseAction);
-                } else if (!(ctx->elseLines.empty())){
+            if (ctx->ELSE()) {
+                if (ctx->elseAction){
+                   this->visitAction(ctx->elseAction);
+                } else if (!ctx->elseLines.empty() && ctx->ENDIF()) {
                     for (auto line : ctx->elseLines) this->visitLine(line);
+                } else {
+                    throw std::invalid_argument("Action or lines expected");
                 }
             }
         }
@@ -70,10 +72,10 @@ antlrcpp::Any Visitor::visitIfStatement(PMACParser::IfStatementContext *ctx) {
 
 antlrcpp::Any Visitor::visitWhileStatement(PMACParser::WhileStatementContext *ctx) {
     if (ctx->WHILE()) {
-        while (this->visitCondition(ctx->condition()).as<bool>()) {
+        while (this->visitCompoundCondition(ctx->compoundCondition()).as<bool>()) {
             if(ctx->whileAction) {
                 this->visitAction(ctx->whileAction);
-            } else if (!ctx->whileLines.empty()) {
+            } else if (!ctx->whileLines.empty() && ctx->ENDWHILE()) {
                 for (auto line : ctx->whileLines) this->visitLine(line);
             } else {
                 throw std::invalid_argument("Action or lines expected");
@@ -85,43 +87,80 @@ antlrcpp::Any Visitor::visitWhileStatement(PMACParser::WhileStatementContext *ct
     return antlrcpp::Any();
 }
 
+antlrcpp::Any Visitor::visitCompoundCondition(PMACParser::CompoundConditionContext *ctx) {
+    if (ctx->LPAR() && ctx->center && ctx->RPAR()) {
+        return antlrcpp::Any(this->visitCompoundCondition(ctx->center));
+    } else if (ctx->left && ctx->logicalOp && ctx->right) {
+        bool left  = this->visitCompoundCondition(ctx->left).as<bool>();
+        bool right = this->visitCompoundCondition(ctx->left).as<bool>();
+        if (ctx->AND()) {
+            return antlrcpp::Any(left && right);
+        } else if (ctx->OR()) {
+            return antlrcpp::Any(left || right);
+        }
+    } else if (ctx->condition()) {
+        return antlrcpp::Any(this->visitCondition(ctx->condition()));
+    }
+    return PMACBaseVisitor::visitCompoundCondition(ctx);
+}
+
+antlrcpp::Any Visitor::visitCondition(PMACParser::ConditionContext *ctx) {
+    if (ctx->left && ctx->comparator() && ctx->right) {
+        double left  = this->visitExpr(ctx->left);
+        double right = this->visitExpr(ctx->right);
+        if (ctx->comparator()->EQ()) {
+            return antlrcpp::Any(left == right);
+        } else if (ctx->comparator()->NEQ()) {
+            return antlrcpp::Any(left != right);
+        } else if (ctx->comparator()->LT()) {
+            return antlrcpp::Any(left < right);
+        } else if (ctx->comparator()->GT()) {
+            return antlrcpp::Any(left > right);
+        } else if (ctx->comparator()->NLT()) {
+            return antlrcpp::Any(left >= right);
+        } else if (ctx->comparator()->NGT()) {
+            return antlrcpp::Any(left <= right);
+        } else {
+            throw std::invalid_argument("Condition operator not yet implemented");
+        }
+    } else {
+        throw std::invalid_argument("Condition does not have a comparator");
+    }
+    return antlrcpp::Any();
+}
+
 antlrcpp::Any Visitor::visitAssign(PMACParser::AssignContext *ctx) {
     // First visit the right side of the assignment
-    antlrcpp::Any result = this->visitExpr(ctx->expr());
-    if (result.isNotNull()) {
-        // set variable to the result value
-        this->env.setVariable(ctx->var()->getText(), result.as<double>());
-        std::cout << ctx->var()->getText() << " = " << result.as<double>() << std::endl << std::flush;
-    } else {
-        throw std::invalid_argument("Assign null expression to variable " + ctx->var()->getText());
-    }
+    double expr = this->visitExpr(ctx->expr()).as<double>();
+    this->env.setVariable(ctx->var()->getText(), expr);
+    std::cout << ctx->var()->getText() << " = " << expr << std::endl << std::flush;
     return antlrcpp::Any();
 }
 
 antlrcpp::Any Visitor::visitExpr(PMACParser::ExprContext *ctx) {
     // if atom -> return its value
     if (ctx->atom()) return this->visitAtom(ctx->atom());
-    // '(' expr ')'
-    if (ctx->LPAR() && ctx->RPAR() && ctx->center) return this->visitExpr(ctx->center);
+    // '(' center=expr ')'
+    if (ctx->LPAR() && ctx->center && ctx->RPAR()) return this->visitExpr(ctx->center);
     // MIN expr
     if (ctx->minExpr) {
        return antlrcpp::Any(-(this->visitExpr(ctx->minExpr).as<double>()));
     }
     // left op right
-    if (ctx->op()) {
+    if (ctx->left && ctx->op && ctx->right) {
         double left  = this->visitExpr(ctx->left).as<double>();
         double right = this->visitExpr(ctx->right).as<double>();
         // left PLUS right
-        if (ctx->op()->PLUS()) {
+        if (ctx->PLUS()) {
             return antlrcpp::Any(left+right);
         // left MIN right
-        } else if (ctx->op()->MIN()) {
-            return antlrcpp::Any(left+right);
+        } else if (ctx->MIN()) {
+            return antlrcpp::Any(left-right);
         // left MULT right
-        } else if (ctx->op()->MULT()) {
+        } else if (ctx->MULT()) {
             return antlrcpp::Any(left * right);
         // left DIV right
-        } else if (ctx->op()->DIV()) {
+        } else if (ctx->DIV()) {
             if (right == 0) {
                 throw std::logic_error("Division by zero");
             } else {
@@ -129,10 +168,9 @@ antlrcpp::Any Visitor::visitExpr(PMACParser::ExprContext *ctx) {
             }
         }
     }
-
-    // function '(' expr ')'
-    if (ctx->LPAR() && ctx->LPAR() && ctx->function() && ctx->arg) {
-        double argument = this->visitExpr(ctx->arg).as<double>();
+    // function '(' argument=expr ')'
+    if (ctx->function() && ctx->LPAR() && ctx->argument && ctx->RPAR()) {
+        double argument = this->visitExpr(ctx->argument).as<double>();
 
         // Standard functions
         if (ctx->function()->LN()) {
@@ -187,30 +225,6 @@ antlrcpp::Any Visitor::visitExpr(PMACParser::ExprContext *ctx) {
     return antlrcpp::Any();
 }
 
-antlrcpp::Any Visitor::visitCondition(PMACParser::ConditionContext *ctx) {
-    if (ctx->comparator()) {
-        double left  = this->visitExpr(ctx->left);
-        double right = this->visitExpr(ctx->right);
-        if (ctx->comparator()->EQ()) {
-            return antlrcpp::Any(left == right);
-        } else if (ctx->comparator()->NEQ()) {
-            return antlrcpp::Any(left != right);
-        } else if (ctx->comparator()->LT()) {
-            return antlrcpp::Any(left < right);
-        } else if (ctx->comparator()->GT()) {
-            return antlrcpp::Any(left > right);
-        } else if (ctx->comparator()->NLT()) {
-            return antlrcpp::Any(left >= right);
-        } else if (ctx->comparator()->NGT()) {
-            return antlrcpp::Any(left <= right);
-        } else {
-            throw std::invalid_argument("Condition operator not yet implemented");
-        }
-    } else {
-        throw std::invalid_argument("Condition does not have a comparator");
-    }
-    return antlrcpp::Any();
-}
 
 antlrcpp::Any Visitor::visitAtom(PMACParser::AtomContext *ctx) {
     if (ctx->var()) {

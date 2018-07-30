@@ -39,6 +39,14 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual antlrcpp::Any visitCompoundCondition(PMACParser::CompoundConditionContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitCondition(PMACParser::ConditionContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual antlrcpp::Any visitData(PMACParser::DataContext *ctx) override {
     return visitChildren(ctx);
   }
@@ -52,14 +60,6 @@ public:
   }
 
   virtual antlrcpp::Any visitExpr(PMACParser::ExprContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitCondition(PMACParser::ConditionContext *ctx) override {
-    return visitChildren(ctx);
-  }
-
-  virtual antlrcpp::Any visitOp(PMACParser::OpContext *ctx) override {
     return visitChildren(ctx);
   }
 
