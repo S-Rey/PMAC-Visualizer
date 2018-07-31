@@ -25,4 +25,16 @@ make
 # build and run the project antlr-tutorial (do not select the auto-generated ALL_BUILD)
 ```
 
-**You can read an article on the example on [Getting started with ANTLR in C++](https://tomassetti.me/getting-started-antlr-cpp/)**
+Changes to apply to files for compiling for Windows (As Microsoft does not follow some C++ standards)
+ - Visitor.h    (For M_PI)
+    ```
+    #define _USE_MATH_DEFINES
+    ```
+    at the beginning of the includes
+
+ - Visitor.h    (For std::toupper)
+    ```
+    #include <ctype.h> 
+    ```
+    and change std::toupper(c) to toupper(c) in the Environment::setVariable() function,
+    in the Environment.cpp file.
