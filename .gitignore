@@ -1,4 +1,13 @@
 .git/
+
+# Interpreter
 interpreter/.idea/
 interpreter/cmake-build-debug/
 interpreter/build/
+interpreter/compile_commands.json
+
+# Visualizer
+visualizer/.idea/
+visualizer/cmake-build-debug/
+visualizer/build/
+visualizer/compile_commands.json
