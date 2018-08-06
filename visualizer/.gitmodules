@@ -1,0 +1,7 @@
+[submodule "visualizer/ext/glfw"]
+	path = visualizer/ext/glfw
+	url = git@github.com:glfw/glfw.git
+[submodule "visualizer/ext/glad"]
+	path = visualizer/ext/glad
+	url = git@github.com:Dav1dde/glad.git
+	branch = c
