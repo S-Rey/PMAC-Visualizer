@@ -24,9 +24,13 @@ target_include_directories(visualizer PRIVATE
     ${GLFW_INCLUDE_DIR}
     # GLAD OpenGL function loader
     ${GLAD_INCLUDE_DIR}
-    # TinyObjLoader OBJ mesh loader
-    )
+    # NanoGUI user interface library
+    ${NANOGUI_INCLUDE_DIR}
+    ${NANOGUI_EXTRA_INCS}
+)
 
-target_link_libraries(visualizer glfw glad ${CMAKE_THREAD_LIBS_INIT})
+add_definitions(${NANOGUI_EXTRA_DEFS})
+
+target_link_libraries(visualizer glfw glad nanogui ${NANOGUI_EXTRA_LIBS} ${CMAKE_THREAD_LIBS_INIT})
 
 

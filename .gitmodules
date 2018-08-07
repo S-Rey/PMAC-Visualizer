@@ -5,3 +5,6 @@
 	path = visualizer/ext/glad
 	url = https://github.com/Dav1dde/glad/tree/c
 	branch = c
+[submodule "visualizer/ext/nanogui"]
+	path = visualizer/ext/nanogui
+	url = https://github.com/wjakob/nanogui
