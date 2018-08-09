@@ -21,8 +21,6 @@ int main(int argc, const char* argv[]) {
 
     Visitor visitor = Visitor();
     visitor.visitProgram(tree);
-    //Scene scene = visitor.visitProgram(tree);
-    //scene.draw();
 
     return 0;
 }

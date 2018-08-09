@@ -92,7 +92,7 @@ antlrcpp::Any Visitor::visitCompoundCondition(PMACParser::CompoundConditionConte
         return antlrcpp::Any(this->visitCompoundCondition(ctx->center));
     } else if (ctx->left && ctx->logicalOp && ctx->right) {
         bool left  = this->visitCompoundCondition(ctx->left).as<bool>();
-        bool right = this->visitCompoundCondition(ctx->left).as<bool>();
+        bool right = this->visitCompoundCondition(ctx->right).as<bool>();
         if (ctx->AND()) {
             return antlrcpp::Any(left && right);
         } else if (ctx->OR()) {
@@ -133,7 +133,7 @@ antlrcpp::Any Visitor::visitAssign(PMACParser::AssignContext *ctx) {
     // First visit the right side of the assignment
     double expr = this->visitExpr(ctx->expr()).as<double>();
     this->env.setVariable(ctx->var()->getText(), expr);
-    std::cout << ctx->var()->getText() << " = " << expr << std::endl << std::flush;
+    //std::cout << ctx->var()->getText() << " = " << expr << std::endl << std::flush;
     return antlrcpp::Any();
 }
 
