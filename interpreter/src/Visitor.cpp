@@ -1,4 +1,4 @@
-#include "Visitor.h"
+#include <interpreter/Visitor.h>
 
 antlrcpp::Any Visitor::visitProgram(PMACParser::ProgramContext *ctx) {
     size_t i = 1;

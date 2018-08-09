@@ -1,31 +1,22 @@
 cmake_minimum_required(VERSION 2.8)
-
 project("PMAC-Interpreter")
 
-# CMake commands copied by the CMake file for CImg
-
-# To use PKG_CHECK_MODULES to find some optional packages
-find_package(PkgConfig)
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall")
 
-
-if (NOT WIN32)
-  SET( SYSTEM_LIBS ${SYSTEM_LIBS} ${CMAKE_THREAD_LIBS_INIT} )
-endif()
-
+## Generated source by antlr
 set(GENERATED_SRC
   ${PROJECT_SOURCE_DIR}/antlr4-runtime/PMACLexer.cpp
   ${PROJECT_SOURCE_DIR}/antlr4-runtime/PMACParser.cpp
   ${PROJECT_SOURCE_DIR}/antlr4-runtime/PMACBaseVisitor.cpp
   ${PROJECT_SOURCE_DIR}/antlr4-runtime/PMACVisitor.cpp
- )
+)
 
 foreach( src_file ${GENERATED_SRC} )
-      set_source_files_properties(
-          ${src_file}
-          PROPERTIES
-          GENERATED TRUE
-          )
+    set_source_files_properties(
+        ${src_file}
+        PROPERTIES
+        GENERATED TRUE
+    )
 endforeach( src_file ${GENERATED_SRC} )
 
 include_directories(
@@ -37,76 +28,79 @@ include_directories(
   ${PROJECT_SOURCE_DIR}/antlr4-runtime/support
   ${PROJECT_SOURCE_DIR}/
   ${PROJECT_SOURCE_DIR}/libs/
-  )
-
-## For interpreter
-set(PMAC-Interpreter_SRC
-  ${PROJECT_SOURCE_DIR}/interpreter.cpp
-  ${PROJECT_SOURCE_DIR}/Visitor.cpp
-  ${PROJECT_SOURCE_DIR}/Environment.cpp
-  ${GENERATED_SRC}
-  )
-
-
-if (NOT CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
-  set (flags_1 "-Wno-overloaded-virtual")
-else()
-  set (flags_1 "-MP /wd4251")
-endif()
-
-foreach( src_file ${PMAC-Interpreter_SRC} )
-      set_source_files_properties(
-          ${src_file}
-          PROPERTIES
-          COMPILE_FLAGS "${COMPILE_FLAGS} ${flags_1}"
-          )
-endforeach( src_file ${PMAC-Interpreter_SRC} )
-
-add_executable(PMAC-Interpreter
-  ${PMAC-Interpreter_SRC}
 )
 
+
+set(PMAC-Interpreter_SRC
+    # Header files
+    include/interpreter/Environment.h
+    include/interpreter/Visitor.h
+
+    # Source files
+    src/Environment.cpp
+    src/Visitor.cpp
+    ${GENERATED_SRC}
+)
+
+if (NOT CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+    set (flags_1 "-Wno-overloaded-virtual")
+else()
+    set (flags_1 "-MP /wd4251")
+endif()
+
+#foreach( src_file ${PMAC-Interpreter_SRC} )
+#    set_source_files_properties(
+#        ${src_file}
+#        PROPERTIES
+#        COMPILE_FLAGS "${COMPILE_FLAGS} ${flags_1}"
+#    )
+#endforeach( src_file ${PMAC-Interpreter_SRC} )
+
+
+add_executable(PMAC-Interpreter
+    src/interpreter.cpp
+    ${PMAC-Interpreter_SRC}
+)
+target_include_directories(PMAC-Interpreter PRIVATE
+    # Kiryu include files
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
 
 ####### GTEST
 add_subdirectory(ext/googletest)
-set(Interpreter-tests_SRC
-  ${PROJECT_SOURCE_DIR}/test/main.cpp 
-  #${PROJECT_SOURCE_DIR}/Visitor.cpp
-  ${PROJECT_SOURCE_DIR}/Environment.cpp
-  #${GENERATED_SRC}
-  )
 
-#foreach( src_file ${PMAC-Interpreter_SRC} )
-#      set_source_files_properties(
-#          ${src_file}
-#          PROPERTIES
-#          COMPILE_FLAGS "${COMPILE_FLAGS} ${flags_1}"
-#          )
-#endforeach( src_file ${PMAC-Interpreter_SRC} )
-
-add_executable(Interpreter-tests
-    ${Interpreter-tests_SRC}
+add_executable(PMAC-Interpreter-tests
+    test/main.cpp
+    ${PMAC-Interpreter_SRC}
+)
+target_include_directories(PMAC-Interpreter-tests PRIVATE
+    # Kiryu include files
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-target_link_libraries(Interpreter-tests gtest ${CMAKE_THREAD_LIBS_INIT})
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
   # see https://github.com/antlr/antlr4/issues/1874
   target_compile_options(PMAC-Interpreter PUBLIC "$<$<CONFIG:DEBUG>:/MT>")
+  target_compile_options(PMAC-Interpreter-tests PUBLIC "$<$<CONFIG:DEBUG>:/MT>")
 endif()
 
 if(WIN32)
   target_link_libraries(PMAC-Interpreter "${PROJECT_SOURCE_DIR}/libs/antlr4-runtime.lib")
+  target_link_libraries(PMAC-Interpreter-tests "${PROJECT_SOURCE_DIR}/libs/antlr4-runtime.lib")
 endif()
 
 if(APPLE)
   target_link_libraries(PMAC-Interpreter "${PROJECT_SOURCE_DIR}/libs/libantlr4-runtime.dylib")
+  target_link_libraries(PMAC-Interpreter-tests "${PROJECT_SOURCE_DIR}/libs/libantlr4-runtime.dylib")
 elseif(UNIX)
   target_link_libraries(PMAC-Interpreter "${PROJECT_SOURCE_DIR}/libs/libantlr4-runtime.so")
+  target_link_libraries(PMAC-Interpreter-tests "${PROJECT_SOURCE_DIR}/libs/libantlr4-runtime.so")
 endif()
 
 
 target_link_libraries(PMAC-Interpreter ${SYSTEM_LIBS})
+target_link_libraries(PMAC-Interpreter-tests gtest ${SYSTEM_LIBS})
 
 if(CMAKE_SYSTEM_NAME MATCHES "Linux")
 add_custom_command(TARGET PMAC-Interpreter POST_BUILD

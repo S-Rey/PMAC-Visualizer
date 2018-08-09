@@ -3,7 +3,7 @@
 #include "antlr4-runtime/antlr4-runtime.h"
 #include "antlr4-runtime/PMACLexer.h"
 #include "antlr4-runtime/PMACParser.h"
-#include "Visitor.h"
+#include <interpreter/Visitor.h>
 
 using namespace std;
 using namespace antlr4;

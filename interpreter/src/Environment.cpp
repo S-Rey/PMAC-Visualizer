@@ -1,4 +1,4 @@
-#include "Environment.h"
+#include <interpreter/Environment.h>
 
 void Environment::setVariable(const std::string& variable, double value) {
     // convert variable name to upper case as PMAC is case insentive
