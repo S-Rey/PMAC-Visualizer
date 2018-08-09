@@ -48,25 +48,16 @@ else()
     set (flags_1 "-MP /wd4251")
 endif()
 
-#foreach( src_file ${PMAC-Interpreter_SRC} )
-#    set_source_files_properties(
-#        ${src_file}
-#        PROPERTIES
-#        COMPILE_FLAGS "${COMPILE_FLAGS} ${flags_1}"
-#    )
-#endforeach( src_file ${PMAC-Interpreter_SRC} )
-
-
+###### Executable
 add_executable(PMAC-Interpreter
     src/interpreter.cpp
     ${PMAC-Interpreter_SRC}
 )
 target_include_directories(PMAC-Interpreter PRIVATE
-    # Kiryu include files
     ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-####### GTEST
+###### GTEST
 add_subdirectory(ext/googletest)
 
 add_executable(PMAC-Interpreter-tests
@@ -74,7 +65,6 @@ add_executable(PMAC-Interpreter-tests
     ${PMAC-Interpreter_SRC}
 )
 target_include_directories(PMAC-Interpreter-tests PRIVATE
-    # Kiryu include files
     ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 

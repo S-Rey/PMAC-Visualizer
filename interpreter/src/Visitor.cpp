@@ -10,7 +10,7 @@ antlrcpp::Any Visitor::visitProgram(PMACParser::ProgramContext *ctx) {
         }
         ++i;
     }
-    std::cout << this->env.toString() << std::endl << std::flush;
+    //std::cout << this->env.toString() << std::endl << std::flush;
     return antlrcpp::Any();
 };
 

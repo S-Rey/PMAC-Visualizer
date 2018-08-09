@@ -21,6 +21,6 @@ public:
     antlrcpp::Any visitAtom(PMACParser::AtomContext *ctx) override;
     antlrcpp::Any visitNumber(PMACParser::NumberContext *ctx) override;
     antlrcpp::Any visitVar(PMACParser::VarContext *ctx) override;
-private:
+//private:
     Environment env = Environment();
 };
