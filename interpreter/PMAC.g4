@@ -65,12 +65,12 @@ assign
 expr
     : LPAR center=expr RPAR
     | function LPAR argument=expr RPAR
+    | MIN minExpr=expr
     | left=expr op=(MULT | DIV | MOD) right=expr
     | left=expr op=(PLUS | MIN)       right=expr
     | left=expr op=AND_OP             right=expr
     | left=expr op=XOR                right=expr
     | left=expr op=OR_OP              right=expr
-    | MIN minExpr=expr
     | atom
     ;
 
