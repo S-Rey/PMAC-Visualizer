@@ -166,6 +166,9 @@ antlrcpp::Any Visitor::visitExpr(PMACParser::ExprContext *ctx) {
             } else {
                 return antlrcpp::Any(left / right);
             }
+        } else if (ctx->MOD()) {
+            // cast double to int to do the modulo operation
+            return antlrcpp::Any((double)((int)left % (int)right));
         }
     }
     // function '(' argument=expr ')'

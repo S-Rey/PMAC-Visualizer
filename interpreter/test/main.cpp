@@ -293,11 +293,13 @@ TEST(Visitor, expression){
         // Test precedence of operations
         "\n"    "M1 = 0 + -1"
         "\n"    "M2 = -1 * 2 + 1 * 2"
+        "\n"    "M3 = -1 / 2 + 4 % 2"
         ;
     Visitor visitor = Visitor();
     runProgram (visitor, program);
     EXPECT_EQ(visitor.env.getValue("M1"), -1);
     EXPECT_EQ(visitor.env.getValue("M2"), 0);
+    EXPECT_EQ(visitor.env.getValue("M3"), -0.5);
 
 }
 
