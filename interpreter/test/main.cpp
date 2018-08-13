@@ -94,12 +94,13 @@ TEST(Visitor, functions) {
         "\n"    "M24 = ATAN(0)"
         "\n"    "M25 = ATAN(1)"
         // ATAN2
-        "\n"    "Q0  = COS(-45)"
-        "\n"    "M26 = ATAN2(0)"
-        "\n"    "M27 = ATAN2(1)"
+        "\n"    "Q30 = -0.707"
+        "\n"    "Q31  = -0.707"
+        "\n"    "Q0  = Q30"
+        "\n"    "Q33  = ATAN2(Q31)"
 
         // In radians
-        "\n"    "I18 = 1"
+        "\n"    "I15 = 1"
         "\n"    "M28 = SIN(0)"
         "\n"    "M29 = SIN(Q800/2)"
     ;
@@ -149,19 +150,13 @@ TEST(Visitor, functions) {
     EXPECT_EQ(visitor.env.getValue("M25"), 45);
     // ATAN2
     //EXPECT_EQ(visitor.env.getValue("M26"), 0);
-    //EXPECT_EQ(visitor.env.getValue("M27"), 45);
+    EXPECT_EQ(visitor.env.getValue("Q33"), -135);
     //
-    // In radians
+    // In radians (Just check if conversion deg->rad is done with one example)
     //
     // SIN
-    //EXPECT_EQ(visitor.env.getValue("M28"), 0.0);
-    //EXPECT_EQ(visitor.env.getValue("M29"), 1.0); // NOT WORKING
-    // ATAN2
-
-
-    //EXPECT_EQ(visitor.env.getValue("M1"), sin(0));
-    //EXPECT_EQ(visitor.env.getValue("M2"), sin(M_PI));
-    //EXPECT_EQ(visitor.env.getValue("M3"), cos(M_PI/2.0));
+    EXPECT_EQ(visitor.env.getValue("M28"), 0.0);
+    EXPECT_EQ(visitor.env.getValue("M29"), 1.0);
 }
 
 TEST(Visitor, ifStatement) {
