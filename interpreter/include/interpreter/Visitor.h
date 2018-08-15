@@ -1,3 +1,5 @@
+#pragma once
+
 #include "antlr4-runtime/antlr4-runtime.h"
 #include "antlr4-runtime/PMACBaseVisitor.h"
 #include "Environment.h"
@@ -19,6 +21,6 @@ public:
     antlrcpp::Any visitAtom(PMACParser::AtomContext *ctx) override;
     antlrcpp::Any visitNumber(PMACParser::NumberContext *ctx) override;
     antlrcpp::Any visitVar(PMACParser::VarContext *ctx) override;
-private:
+//private:
     Environment env = Environment();
 };

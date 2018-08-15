@@ -3,7 +3,7 @@
 #include "antlr4-runtime/antlr4-runtime.h"
 #include "antlr4-runtime/PMACLexer.h"
 #include "antlr4-runtime/PMACParser.h"
-#include "Visitor.h"
+#include <interpreter/Visitor.h>
 
 using namespace std;
 using namespace antlr4;
@@ -21,8 +21,6 @@ int main(int argc, const char* argv[]) {
 
     Visitor visitor = Visitor();
     visitor.visitProgram(tree);
-    //Scene scene = visitor.visitProgram(tree);
-    //scene.draw();
 
     return 0;
 }

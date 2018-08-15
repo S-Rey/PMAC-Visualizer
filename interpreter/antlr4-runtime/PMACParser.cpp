@@ -1163,7 +1163,7 @@ PMACParser::ExprContext* PMACParser::expr(int precedence) {
         setState(164);
         match(PMACParser::MIN);
         setState(165);
-        dynamic_cast<ExprContext *>(_localctx)->minExpr = expr(2);
+        dynamic_cast<ExprContext *>(_localctx)->minExpr = expr(7);
         break;
       }
 
@@ -1200,7 +1200,7 @@ PMACParser::ExprContext* PMACParser::expr(int precedence) {
           pushNewRecursionContext(_localctx, startState, RuleExpr);
           setState(169);
 
-          if (!(precpred(_ctx, 7))) throw FailedPredicateException(this, "precpred(_ctx, 7)");
+          if (!(precpred(_ctx, 6))) throw FailedPredicateException(this, "precpred(_ctx, 6)");
           setState(170);
           dynamic_cast<ExprContext *>(_localctx)->op = _input->LT(1);
           _la = _input->LA(1);
@@ -1215,7 +1215,7 @@ PMACParser::ExprContext* PMACParser::expr(int precedence) {
             consume();
           }
           setState(171);
-          dynamic_cast<ExprContext *>(_localctx)->right = expr(8);
+          dynamic_cast<ExprContext *>(_localctx)->right = expr(7);
           break;
         }
 
@@ -1225,7 +1225,7 @@ PMACParser::ExprContext* PMACParser::expr(int precedence) {
           pushNewRecursionContext(_localctx, startState, RuleExpr);
           setState(172);
 
-          if (!(precpred(_ctx, 6))) throw FailedPredicateException(this, "precpred(_ctx, 6)");
+          if (!(precpred(_ctx, 5))) throw FailedPredicateException(this, "precpred(_ctx, 5)");
           setState(173);
           dynamic_cast<ExprContext *>(_localctx)->op = _input->LT(1);
           _la = _input->LA(1);
@@ -1239,7 +1239,7 @@ PMACParser::ExprContext* PMACParser::expr(int precedence) {
             consume();
           }
           setState(174);
-          dynamic_cast<ExprContext *>(_localctx)->right = expr(7);
+          dynamic_cast<ExprContext *>(_localctx)->right = expr(6);
           break;
         }
 
@@ -1249,11 +1249,11 @@ PMACParser::ExprContext* PMACParser::expr(int precedence) {
           pushNewRecursionContext(_localctx, startState, RuleExpr);
           setState(175);
 
-          if (!(precpred(_ctx, 5))) throw FailedPredicateException(this, "precpred(_ctx, 5)");
+          if (!(precpred(_ctx, 4))) throw FailedPredicateException(this, "precpred(_ctx, 4)");
           setState(176);
           dynamic_cast<ExprContext *>(_localctx)->op = match(PMACParser::AND_OP);
           setState(177);
-          dynamic_cast<ExprContext *>(_localctx)->right = expr(6);
+          dynamic_cast<ExprContext *>(_localctx)->right = expr(5);
           break;
         }
 
@@ -1263,11 +1263,11 @@ PMACParser::ExprContext* PMACParser::expr(int precedence) {
           pushNewRecursionContext(_localctx, startState, RuleExpr);
           setState(178);
 
-          if (!(precpred(_ctx, 4))) throw FailedPredicateException(this, "precpred(_ctx, 4)");
+          if (!(precpred(_ctx, 3))) throw FailedPredicateException(this, "precpred(_ctx, 3)");
           setState(179);
           dynamic_cast<ExprContext *>(_localctx)->op = match(PMACParser::XOR);
           setState(180);
-          dynamic_cast<ExprContext *>(_localctx)->right = expr(5);
+          dynamic_cast<ExprContext *>(_localctx)->right = expr(4);
           break;
         }
 
@@ -1277,11 +1277,11 @@ PMACParser::ExprContext* PMACParser::expr(int precedence) {
           pushNewRecursionContext(_localctx, startState, RuleExpr);
           setState(181);
 
-          if (!(precpred(_ctx, 3))) throw FailedPredicateException(this, "precpred(_ctx, 3)");
+          if (!(precpred(_ctx, 2))) throw FailedPredicateException(this, "precpred(_ctx, 2)");
           setState(182);
           dynamic_cast<ExprContext *>(_localctx)->op = match(PMACParser::OR_OP);
           setState(183);
-          dynamic_cast<ExprContext *>(_localctx)->right = expr(4);
+          dynamic_cast<ExprContext *>(_localctx)->right = expr(3);
           break;
         }
 
@@ -1815,11 +1815,11 @@ bool PMACParser::compoundConditionSempred(CompoundConditionContext *_localctx, s
 
 bool PMACParser::exprSempred(ExprContext *_localctx, size_t predicateIndex) {
   switch (predicateIndex) {
-    case 3: return precpred(_ctx, 7);
-    case 4: return precpred(_ctx, 6);
-    case 5: return precpred(_ctx, 5);
-    case 6: return precpred(_ctx, 4);
-    case 7: return precpred(_ctx, 3);
+    case 3: return precpred(_ctx, 6);
+    case 4: return precpred(_ctx, 5);
+    case 5: return precpred(_ctx, 4);
+    case 6: return precpred(_ctx, 3);
+    case 7: return precpred(_ctx, 2);
 
   default:
     break;
@@ -1993,16 +1993,16 @@ PMACParser::Initializer::Initializer() {
     0xa1, 0xa2, 0x5, 0x24, 0x13, 0x2, 0xa2, 0xa3, 0x7, 0x3e, 0x2, 0x2, 0xa3, 
     0xa4, 0x5, 0x18, 0xd, 0x2, 0xa4, 0xa5, 0x7, 0x3f, 0x2, 0x2, 0xa5, 0xaa, 
     0x3, 0x2, 0x2, 0x2, 0xa6, 0xa7, 0x7, 0x31, 0x2, 0x2, 0xa7, 0xaa, 0x5, 
-    0x18, 0xd, 0x4, 0xa8, 0xaa, 0x5, 0x1e, 0x10, 0x2, 0xa9, 0x9c, 0x3, 0x2, 
+    0x18, 0xd, 0x9, 0xa8, 0xaa, 0x5, 0x1e, 0x10, 0x2, 0xa9, 0x9c, 0x3, 0x2, 
     0x2, 0x2, 0xa9, 0xa1, 0x3, 0x2, 0x2, 0x2, 0xa9, 0xa6, 0x3, 0x2, 0x2, 
     0x2, 0xa9, 0xa8, 0x3, 0x2, 0x2, 0x2, 0xaa, 0xbc, 0x3, 0x2, 0x2, 0x2, 
-    0xab, 0xac, 0xc, 0x9, 0x2, 0x2, 0xac, 0xad, 0x9, 0x2, 0x2, 0x2, 0xad, 
-    0xbb, 0x5, 0x18, 0xd, 0xa, 0xae, 0xaf, 0xc, 0x8, 0x2, 0x2, 0xaf, 0xb0, 
-    0x9, 0x3, 0x2, 0x2, 0xb0, 0xbb, 0x5, 0x18, 0xd, 0x9, 0xb1, 0xb2, 0xc, 
-    0x7, 0x2, 0x2, 0xb2, 0xb3, 0x7, 0x35, 0x2, 0x2, 0xb3, 0xbb, 0x5, 0x18, 
-    0xd, 0x8, 0xb4, 0xb5, 0xc, 0x6, 0x2, 0x2, 0xb5, 0xb6, 0x7, 0x37, 0x2, 
-    0x2, 0xb6, 0xbb, 0x5, 0x18, 0xd, 0x7, 0xb7, 0xb8, 0xc, 0x5, 0x2, 0x2, 
-    0xb8, 0xb9, 0x7, 0x36, 0x2, 0x2, 0xb9, 0xbb, 0x5, 0x18, 0xd, 0x6, 0xba, 
+    0xab, 0xac, 0xc, 0x8, 0x2, 0x2, 0xac, 0xad, 0x9, 0x2, 0x2, 0x2, 0xad, 
+    0xbb, 0x5, 0x18, 0xd, 0x9, 0xae, 0xaf, 0xc, 0x7, 0x2, 0x2, 0xaf, 0xb0, 
+    0x9, 0x3, 0x2, 0x2, 0xb0, 0xbb, 0x5, 0x18, 0xd, 0x8, 0xb1, 0xb2, 0xc, 
+    0x6, 0x2, 0x2, 0xb2, 0xb3, 0x7, 0x35, 0x2, 0x2, 0xb3, 0xbb, 0x5, 0x18, 
+    0xd, 0x7, 0xb4, 0xb5, 0xc, 0x5, 0x2, 0x2, 0xb5, 0xb6, 0x7, 0x37, 0x2, 
+    0x2, 0xb6, 0xbb, 0x5, 0x18, 0xd, 0x6, 0xb7, 0xb8, 0xc, 0x4, 0x2, 0x2, 
+    0xb8, 0xb9, 0x7, 0x36, 0x2, 0x2, 0xb9, 0xbb, 0x5, 0x18, 0xd, 0x5, 0xba, 
     0xab, 0x3, 0x2, 0x2, 0x2, 0xba, 0xae, 0x3, 0x2, 0x2, 0x2, 0xba, 0xb1, 
     0x3, 0x2, 0x2, 0x2, 0xba, 0xb4, 0x3, 0x2, 0x2, 0x2, 0xba, 0xb7, 0x3, 
     0x2, 0x2, 0x2, 0xbb, 0xbe, 0x3, 0x2, 0x2, 0x2, 0xbc, 0xba, 0x3, 0x2, 

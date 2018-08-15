@@ -8,3 +8,6 @@
 [submodule "visualizer/ext/nanogui"]
 	path = visualizer/ext/nanogui
 	url = https://github.com/wjakob/nanogui
+[submodule "interpreter/ext/googletest"]
+	path = interpreter/ext/googletest
+	url = https://github.com/google/googletest

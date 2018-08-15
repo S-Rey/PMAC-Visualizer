@@ -1,4 +1,10 @@
-#include "Environment.h"
+#include <interpreter/Environment.h>
+
+// The constructor method initializes the variables
+Environment::Environment() {
+    Environment::setVariable("Q800", M_PI);
+    Environment::setVariable("I15", 0);
+}
 
 void Environment::setVariable(const std::string& variable, double value) {
     // convert variable name to upper case as PMAC is case insentive
