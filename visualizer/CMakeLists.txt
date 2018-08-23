@@ -8,29 +8,30 @@ set(CMAKE_BUILD_TYPE Release)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
 
-add_subdirectory(ext)
+add_subdirectory(ext ext_build)
 
-add_executable(visualizer
+
+include_directories(
+  # Nori include files
+  ${CMAKE_CURRENT_SOURCE_DIR}/include
+  ${GLFW_INCLUDE_DIR}
+  # GLEW library for accessing OpenGL functions
+  ${GLEW_INCLUDE_DIR}
+  # NanoVG drawing library
+  ${NANOVG_INCLUDE_DIR}
+  # NanoGUI user interface library
+  ${NANOGUI_INCLUDE_DIR}
+  ${NANOGUI_EXTRA_INCS}
+)
+
+
+add_executable(PMAC-Visualizer
     # Header files
 
     # Source files
     src/main.cpp
-    )
-
-target_include_directories(visualizer PRIVATE
-    # Visualizer include files
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
-    # Eigen linear algebra library
-    ${GLFW_INCLUDE_DIR}
-    # GLAD OpenGL function loader
-    ${GLAD_INCLUDE_DIR}
-    # NanoGUI user interface library
-    ${NANOGUI_INCLUDE_DIR}
-    ${NANOGUI_EXTRA_INCS}
 )
 
 add_definitions(${NANOGUI_EXTRA_DEFS})
 
-target_link_libraries(visualizer glfw glad nanogui ${NANOGUI_EXTRA_LIBS} ${CMAKE_THREAD_LIBS_INIT})
-
-
+target_link_libraries(PMAC-Visualizer nanogui ${NANOGUI_EXTRA_LIBS})

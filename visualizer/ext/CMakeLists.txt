@@ -1,32 +1,135 @@
-## GLFW
-set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL " " FORCE)
-set(GLFW_BUILD_TESTS OFF CACHE BOOL " " FORCE)
-set(GLFW_BUILD_DOCS OFF CACHE BOOL " " FORCE)
-set(GLFW_INSTALL OFF CACHE BOOL " " FORCE)
-set(GLFW_VULKAN_STATIC OFF CACHE BOOL " " FORCE)
+# Set a default build configuration (Release)
+include(CheckCXXCompilerFlag)
 
-add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/glfw")
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+  message(STATUS "Setting build type to 'Release' as none was specified.")
+  set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build." FORCE)
+  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release"
+    "MinSizeRel" "RelWithDebInfo")
+endif()
+string(TOUPPER "${CMAKE_BUILD_TYPE}" U_CMAKE_BUILD_TYPE)
+
+# Enable folders for projects in Visual Studio
+if (CMAKE_GENERATOR MATCHES "Visual Studio")
+  set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+endif()
+
+if (APPLE)
+  set(CMAKE_MACOSX_RPATH ON)
+endif()
+
+if (CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+  CHECK_CXX_COMPILER_FLAG("-std=c++14" HAS_CPP14_FLAG)
+  CHECK_CXX_COMPILER_FLAG("-std=c++11" HAS_CPP11_FLAG)
+
+  if (HAS_CPP14_FLAG)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
+  elseif (HAS_CPP11_FLAG)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+  else()
+    message(FATAL_ERROR "Unsupported compiler -- Nori requires C++11 support!")
+  endif()
+
+  # Enable link time optimization and set the default symbol
+  # visibility to hidden (very important to obtain small binaries)
+  if (NOT ${U_CMAKE_BUILD_TYPE} MATCHES DEBUG)
+    # Default symbol visibility
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fvisibility=hidden")
+  endif()
+
+  # Disable specific GCC 7 warnings
+  if (CMAKE_COMPILER_IS_GNUCC AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 7.0)
+      set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated-declarations -Wno-misleading-indentation -Wformat-truncation=0 -Wno-int-in-bool-context -Wimplicit-fallthrough=0")
+  endif()
+endif()
+
+# Sanitize build environment for static build with C++11
+if (MSVC)
+  # Disable annoying secure CRT warnings
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /D_CRT_SECURE_NO_WARNINGS")
+
+  # We'll select the TBB library ourselves
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /D__TBB_NO_IMPLICIT_LINKAGE")
+
+  # Parallel build on MSVC (all targets)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
+
+  if (NOT CMAKE_SIZEOF_VOID_P EQUAL 8)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /arch:SSE2")
+
+    # Disable Eigen vectorization for Windows 32 bit builds (issues with unaligned access segfaults)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /DEIGEN_DONT_ALIGN")
+  endif()
+
+  # Static build
+  set(CompilerFlags
+        CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE
+        CMAKE_CXX_FLAGS_MINSIZEREL CMAKE_CXX_FLAGS_RELWITHDEBINFO
+        CMAKE_C_FLAGS CMAKE_C_FLAGS_DEBUG CMAKE_C_FLAGS_RELEASE
+        CMAKE_C_FLAGS_MINSIZEREL CMAKE_C_FLAGS_RELWITHDEBINFO)
+  foreach(CompilerFlag ${CompilerFlags})
+    string(REPLACE "/MD" "/MT" ${CompilerFlag} "${${CompilerFlag}}")
+  endforeach()
+elseif(APPLE)
+  # Try to auto-detect a suitable SDK
+  execute_process(COMMAND bash -c "xcodebuild -version -sdk | grep MacOSX | grep Path | head -n 1 | cut -f 2 -d ' '" OUTPUT_VARIABLE CMAKE_OSX_SYSROOT)
+  string(REGEX REPLACE "(\r?\n)+$" "" CMAKE_OSX_SYSROOT "${CMAKE_OSX_SYSROOT}")
+  string(REGEX REPLACE "^.*X([0-9.]*).sdk$" "\\1" CMAKE_OSX_DEPLOYMENT_TARGET "${CMAKE_OSX_SYSROOT}")
+endif()
+
+
+# Build NanoGUI
+set(NANOGUI_BUILD_EXAMPLE OFF CACHE BOOL " " FORCE)
+set(NANOGUI_BUILD_SHARED  OFF CACHE BOOL " " FORCE)
+set(NANOGUI_BUILD_PYTHON  OFF CACHE BOOL " " FORCE)
+add_subdirectory(nanogui)
+set_property(TARGET glfw glfw_objects nanogui nanogui-obj PROPERTY FOLDER "dependencies")
 
 set(GLFW_INCLUDE_DIR
-    ${CMAKE_CURRENT_SOURCE_DIR}/glfw/include)
+  ${CMAKE_CURRENT_SOURCE_DIR}/nanogui/ext/glfw/include)
+set(GLEW_INCLUDE_DIR
+  ${CMAKE_CURRENT_SOURCE_DIR}/nanogui/ext/glew/include)
+set(NANOVG_INCLUDE_DIR
+  ${CMAKE_CURRENT_SOURCE_DIR}/nanogui/ext/nanovg/src)
+set(STB_IMAGE_WRITE_INCLUDE_DIR
+  ${CMAKE_CURRENT_SOURCE_DIR}/nanogui/ext/nanovg/example)
+set(NANOGUI_INCLUDE_DIR
+  ${CMAKE_CURRENT_SOURCE_DIR}/nanogui/include)
+set(EIGEN_INCLUDE_DIR
+  ${CMAKE_CURRENT_SOURCE_DIR}/nanogui/ext/eigen)
 
-set(CompilerFlags ${CompilerFlags}
-    GLFW_INCLUDE_DIR)
+# Compile remainder of the codebase with compiler warnings turned on
+if(MSVC)
+  if(CMAKE_CXX_FLAGS MATCHES "/W[0-4]")
+    string(REGEX REPLACE "/W[0-4]" "/W4" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+  else()
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
+  endif()
+elseif (CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+  # Re-enable disabled warnings
+  # if(CMAKE_CXX_FLAGS MATCHES "-Wno-[^ ]+")
+  #   string(REGEX REPLACE "-Wno-[^ ]+" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+  # endif()
 
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wno-unused-parameter")
+  if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-gnu-anonymous-struct -Wno-c99-extensions -Wno-nested-anon-types -Wno-deprecated-register")
+  endif()
+endif()
 
-## GLAD
-set(GLAD_INCLUDE_DIR
-    ${CMAKE_CURRENT_SOURCE_DIR}/glad/include)
-
-set(CompilerFlags ${CompilerFlags}
-    GLAD_INCLUDE_DIR)
-
-add_library(glad SHARED "${CMAKE_CURRENT_SOURCE_DIR}/glad/src/glad.c")
-target_include_directories(glad PRIVATE ${GLAD_INCLUDE_DIR})
-
-
-
-## Visualizer
+set(CompilerFlags
+      CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE
+      CMAKE_CXX_FLAGS_MINSIZEREL CMAKE_CXX_FLAGS_RELWITHDEBINFO CMAKE_C_FLAGS
+      CMAKE_C_FLAGS_DEBUG CMAKE_C_FLAGS_RELEASE CMAKE_C_FLAGS_MINSIZEREL
+      CMAKE_C_FLAGS_RELWITHDEBINFO COMPILE_DEFINITIONS U_CMAKE_BUILD_TYPE
+      CMAKE_MACOSX_RPATH
+      OPENEXR_INCLUDE_DIRS PCG32_INCLUDE_DIR TFM_INCLUDE_DIR
+      HYPOTHESIS_INCLUDE_DIR GLFW_INCLUDE_DIR GLEW_INCLUDE_DIR
+      NANOVG_INCLUDE_DIR NANOGUI_EXTRA_INCS NANOGUI_EXTRA_DEFS
+	    NANOGUI_EXTRA_LIBS NANOGUI_INCLUDE_DIR EIGEN_INCLUDE_DIR
+      STB_IMAGE_WRITE_INCLUDE_DIR TBB_INCLUDE_DIR
+      FILESYSTEM_INCLUDE_DIR PUGIXML_INCLUDE_DIR
+)
 foreach(CompilerFlag ${CompilerFlags})
-    set(${CompilerFlag} "${${CompilerFlag}}" PARENT_SCOPE)
+  set(${CompilerFlag} "${${CompilerFlag}}" PARENT_SCOPE)
 endforeach()
