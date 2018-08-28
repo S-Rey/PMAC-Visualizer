@@ -27,8 +27,17 @@ include_directories(
 
 add_executable(PMAC-Visualizer
     # Header files
+    #include/visualizer/other.h
+    #include/visualizer/matop.h
+    #include/visualizer/camera.h
+    #include/visualizer/model.h
+    include/visualizer/PMACVisualizerApplication.h
 
     # Source files
+    #src/matop.cpp
+    #src/camera.cpp
+    #src/model.cpp
+    src/PMACVisualizerApplication.cpp
     src/main.cpp
 )
 
