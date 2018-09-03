@@ -45,6 +45,7 @@ PMACVisualizerApplication::PMACVisualizerApplication() : nanogui::Screen(Eigen::
         "in vec3 color;\n"
         "out vec4 frag_color;\n"
         "void main() {\n"
+        //"    frag_color = 3.0 * modelViewProj * vec4(color, 1.0);\n"
         "    frag_color = 3.0 * modelViewProj * vec4(color, 1.0);\n"
         "    gl_Position = modelViewProj * vec4(position, 1.0);\n"
         "}",
@@ -102,12 +103,16 @@ PMACVisualizerApplication::PMACVisualizerApplication() : nanogui::Screen(Eigen::
     mShader.uploadAttrib("position", positions);
     mShader.uploadAttrib("color", colors);
 
+    // Initialize Arcball
+    mArcball.setSize(Screen::size());
+
     mModel.scale = nanogui::scale(Vector3f(0.25f, 0.25f, 0.25f));
     mModel.update();
 
     // Projection matrix
     projectionMat.setIdentity();
     setupProjection(projectionMat);
+
 
     updateMVP();
 }
@@ -116,6 +121,39 @@ PMACVisualizerApplication::~PMACVisualizerApplication() {
     mShader.free();
 }
 
+
+bool PMACVisualizerApplication::mouseButtonEvent(const nanogui::Vector2i &p, int button, bool down, int modifiers) {
+    // In this example, we are using the left mouse button
+    // to control the arcball motion
+    if (button == GLFW_MOUSE_BUTTON_RIGHT && modifiers == 0) {
+        mArcball.button(p, down);
+        return true;
+    }
+    if (button == GLFW_MOUSE_BUTTON_LEFT && modifiers == 0) {
+        mDragView.button(p, down);
+        return true;
+    }
+    return false;
+}
+
+bool PMACVisualizerApplication::mouseMotionEvent(const nanogui::Vector2i &p, const nanogui::Vector2i &rel, int button, int modifiers) {
+    //std::cout << button << std::endl;
+    if (button == 2 && modifiers == 0) {
+        mArcball.motion(p);
+        mModel.rotation = mArcball.matrix();
+        mModel.update();
+        updateMVP();
+        return true;
+    }
+    if (button == 1 && modifiers == 0) {
+        mDragView.motion(p);
+        mModel.translation = mDragView.matrix();
+        mModel.update();
+        updateMVP();
+        return true;
+    }
+    return false;
+}
 
 bool PMACVisualizerApplication::keyboardEvent(int key, int scancode, int action, int modifiers) {
     if (Screen::keyboardEvent(key, scancode, action, modifiers))
@@ -127,12 +165,10 @@ bool PMACVisualizerApplication::keyboardEvent(int key, int scancode, int action,
     if (key == GLFW_KEY_1 && key == GLFW_MOD_SHIFT && action == GLFW_PRESS) {
         nanogui::Matrix4f upScaleMat;
         //scaleMat(1.25f, upScaleMat);
-        modScaleMat = upScaleMat * modScaleMat;
     };
     if (key == GLFW_KEY_MINUS  && action == GLFW_PRESS) {
         nanogui::Matrix4f upScaleMat;
         //scaleMat(0.75f, upScaleMat);
-        modScaleMat = upScaleMat * modScaleMat;
     };
 
     return false;
@@ -144,15 +180,15 @@ void PMACVisualizerApplication::draw(NVGcontext *ctx) {
 
 // Handle the resizing of the window to change the perspective matrix
 bool PMACVisualizerApplication::resizeEvent(const nanogui::Vector2i& size){
-    //std::cout << size << std::endl;
     m_slider->setFixedWidth(Screen::width() - 140);
     m_panel->setSize(nanogui::Vector2i(Screen::width() - 200 ,50));
     m_panel->setPosition(nanogui::Vector2i(0, mSize.y() - m_panel->size().y()));
     performLayout();
 
+    mArcball.setSize(Screen::size());
+
     // Adjust the projection matrix
     setupProjection(projectionMat);
-
     updateMVP();
 
     return true;
@@ -173,20 +209,35 @@ void PMACVisualizerApplication::updateMVP() {
 
 
 nanogui::Matrix4f PMACVisualizerApplication::rotate(const nanogui::Vector3f &axis, float angle) {
-    return Eigen::Affine3f(Eigen::AngleAxisf(angle, axis)).matrix();
+    return Eigen::Affine3f(Eigen::AngleAxisf(angle, axis.normalized())).matrix();
 }
 
 
 void PMACVisualizerApplication::drawContents() {
     using namespace nanogui;
 
-    mShader.bind();
-    mShader.setUniform("modelViewProj", mvp);
+    //mShader.bind();
+    //mShader.setUniform("modelViewProj", mvp);
+    //glEnable(GL_DEPTH_TEST);
+
+    ///* Draw 12 triangles starting at index 0 */
+    //mShader.drawIndexed(GL_TRIANGLES, 0, 12);
+    ////glLineWidth(100);
+    ////mShader.drawIndexed(GL_LINES, 0, 12);
+    //glDisable(GL_DEPTH_TEST);
+    //mGrid.draw(mvp);
+
+
+
+    mGrid.mShader.bind();
+    mGrid.mShader.setUniform("modelViewProj", mvp);
     glEnable(GL_DEPTH_TEST);
-    /* Draw 12 triangles starting at index 0 */
-    mShader.drawIndexed(GL_TRIANGLES, 0, 12);
-    //glLineWidth(100);
-    //mShader.drawIndexed(GL_LINES, 0, 12);
+
+    ///* Draw 12 triangles starting at index 0 */
+    //mShader.drawIndexed(GL_TRIANGLES, 0, 12);
+    glLineWidth(100);
+    //mGrid.mShader.drawIndexed(GL_LINES, 0, 12);
     glDisable(GL_DEPTH_TEST);
+    //mGrid.draw(mvp);
 }
 

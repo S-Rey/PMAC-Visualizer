@@ -7,7 +7,7 @@
 #include <nanogui/textbox.h>
 #include <nanogui/glcanvas.h>
 
-//#include <visualizer/matop.h>
+#include <visualizer/grid.h>
 
 
 #if defined(__GNUC__)
@@ -43,7 +43,6 @@ public:
                     up(0.f, 1.f, 0.f),
                     lookAt(nanogui::lookAt(origin,target,up)) {};
     };
-
     struct Model {
         nanogui::Matrix4f scale;
         nanogui::Matrix4f rotation;
@@ -62,11 +61,56 @@ public:
         }
     };
 
+    struct DragView {
+        DragView() {
+            mActive = false;
+            mLastPos(0.f, 0.f);
+            mTrans(0.f, 0.f);
+            mIncr(0.f, 0.f);
+        }
+
+        void button(nanogui::Vector2i pos, bool pressed) {
+            //std::cout << mTranslation << std::endl;
+            mActive = pressed;
+            mLastPos = pos.cast<float>();
+            if (!mActive)
+                mTrans = mIncr + mTrans;
+            mIncr.Zero();
+        }
+        bool motion(nanogui::Vector2i pos) {
+            if (!mActive)
+                return false;
+            mIncr(0) = speedFactor * (-(mLastPos.x() - pos.x()));
+            mIncr(1) = speedFactor * (mLastPos.y() - pos.y());
+            return true;
+        }
+
+        nanogui::Matrix4f matrix() const {
+            nanogui::Matrix4f result2 = nanogui::Matrix4f::Identity();
+            result2.block<2,1>(0, 3)  = mIncr + mTrans;
+            return result2;
+        }
+    protected:
+        /// Whether or not this DragView is currently active.
+        bool mActive;
+        /// The last click position (which triggered the DragView to be active / non-active).
+        nanogui::Vector2f mLastPos;
+        /// Sate
+        nanogui::Vector2f mTrans;
+        nanogui::Vector2f mIncr;
+        /// Speed factor
+        float speedFactor = 0.001f;
+    };
+
     PMACVisualizerApplication();
 
     ~PMACVisualizerApplication();
 
     virtual bool keyboardEvent(int key, int scancode, int action, int modifiers);
+
+    virtual bool mouseButtonEvent(const nanogui::Vector2i &p, int button, bool down, int modifiers);
+
+    virtual bool mouseMotionEvent(const nanogui::Vector2i &p, const nanogui::Vector2i &rel, int button, int modifiers);
 
     virtual void draw(NVGcontext *ctx);
 
@@ -88,23 +132,21 @@ private:
     float m_time = 0.f;
     float m_totalTime = 100.f;
 
+    // Arcball
+    nanogui::Arcball mArcball;
+    // DragView
+    DragView mDragView;
     // OpenGl
     nanogui::GLShader mShader;
     // Camera
     Camera mCamera;
     // Model
     Model  mModel;
+    // grid
+    Grid mGrid;
     // Projection matrix
     nanogui::Matrix4f projectionMat;
     bool orthographic = true;
     // MVP matrix
     nanogui::Matrix4f mvp;
-
-    nanogui::Matrix4f modelMat;
-    nanogui::Matrix4f modRotMat;
-    nanogui::Matrix4f modScaleMat;
-    nanogui::Matrix4f modTransMat;
-    nanogui::Matrix4f modCompMat;
-    nanogui::Vector3f mRotation = nanogui::Vector3f(0.f, 0.f, 0.f);
-    //Eigen::Vector3f mRotation = nanogui::Vector3f(0.25f, 0.5f, 0.33f);
 };

@@ -10,7 +10,6 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
 
 add_subdirectory(ext ext_build)
 
-
 include_directories(
   # Nori include files
   ${CMAKE_CURRENT_SOURCE_DIR}/include
@@ -24,19 +23,13 @@ include_directories(
   ${NANOGUI_EXTRA_INCS}
 )
 
-
 add_executable(PMAC-Visualizer
     # Header files
-    #include/visualizer/other.h
-    #include/visualizer/matop.h
-    #include/visualizer/camera.h
-    #include/visualizer/model.h
+    include/visualizer/grid.h
     include/visualizer/PMACVisualizerApplication.h
 
     # Source files
-    #src/matop.cpp
-    #src/camera.cpp
-    #src/model.cpp
+    #src/grid.cpp
     src/PMACVisualizerApplication.cpp
     src/main.cpp
 )
