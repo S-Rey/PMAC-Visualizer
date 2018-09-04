@@ -1,10 +1,10 @@
 #include <visualizer/PMACVisualizerApplication.h>
-#include <iostream>
-
-#include "antlr4-runtime/antlr4-runtime.h"
-#include "antlr4-runtime/PMACLexer.h"
-#include "antlr4-runtime/PMACParser.h"
 #include <interpreter/Visitor.h>
+#include <antlr4-runtime/antlr4-runtime.h>
+#include <antlr4-runtime/PMACLexer.h>
+#include <antlr4-runtime/PMACParser.h>
+
+#include <iostream>
 
 #if defined(__GNUC__)
 #  pragma GCC diagnostic ignored "-Wmissing-field-initializers"

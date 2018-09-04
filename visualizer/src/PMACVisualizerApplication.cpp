@@ -216,28 +216,28 @@ nanogui::Matrix4f PMACVisualizerApplication::rotate(const nanogui::Vector3f &axi
 void PMACVisualizerApplication::drawContents() {
     using namespace nanogui;
 
-    //mShader.bind();
-    //mShader.setUniform("modelViewProj", mvp);
-    //glEnable(GL_DEPTH_TEST);
+    mShader.bind();
+    mShader.setUniform("modelViewProj", mvp);
+    glEnable(GL_DEPTH_TEST);
 
     ///* Draw 12 triangles starting at index 0 */
-    //mShader.drawIndexed(GL_TRIANGLES, 0, 12);
+    mShader.drawIndexed(GL_TRIANGLES, 0, 12);
     ////glLineWidth(100);
     ////mShader.drawIndexed(GL_LINES, 0, 12);
-    //glDisable(GL_DEPTH_TEST);
+    glDisable(GL_DEPTH_TEST);
     //mGrid.draw(mvp);
 
 
 
-    mGrid.mShader.bind();
-    mGrid.mShader.setUniform("modelViewProj", mvp);
-    glEnable(GL_DEPTH_TEST);
+    //mGrid.mShader.bind();
+    //mGrid.mShader.setUniform("modelViewProj", mvp);
+    //glEnable(GL_DEPTH_TEST);
 
     ///* Draw 12 triangles starting at index 0 */
     //mShader.drawIndexed(GL_TRIANGLES, 0, 12);
-    glLineWidth(100);
+    //glLineWidth(100);
     //mGrid.mShader.drawIndexed(GL_LINES, 0, 12);
-    glDisable(GL_DEPTH_TEST);
+    //glDisable(GL_DEPTH_TEST);
     //mGrid.draw(mvp);
 }
 

@@ -11,7 +11,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
 add_subdirectory(ext ext_build)
 
 include_directories(
-  # Nori include files
+  # Visualizer include files
   ${CMAKE_CURRENT_SOURCE_DIR}/include
   ${GLFW_INCLUDE_DIR}
   # GLEW library for accessing OpenGL functions

@@ -143,7 +143,7 @@ private:
     // Model
     Model  mModel;
     // grid
-    Grid mGrid;
+    //Grid mGrid;
     // Projection matrix
     nanogui::Matrix4f projectionMat;
     bool orthographic = true;

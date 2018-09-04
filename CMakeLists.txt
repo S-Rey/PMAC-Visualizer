@@ -8,73 +8,67 @@ set(CMAKE_BUILD_TYPE Release)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
 
+add_subdirectory(visualizer/ext visualizer/ext_build)
 
 ### Generated source by antlr
 set(GENERATED_SRC
-  ${PROJECT_SOURCE_DIR}/interpreter/antlr4-runtime/PMACLexer.cpp
-  ${PROJECT_SOURCE_DIR}/interpreter/antlr4-runtime/PMACParser.cpp
-  ${PROJECT_SOURCE_DIR}/interpreter/antlr4-runtime/PMACBaseVisitor.cpp
-  ${PROJECT_SOURCE_DIR}/interpreter/antlr4-runtime/PMACVisitor.cpp
+    ${PROJECT_SOURCE_DIR}/interpreter/antlr4-runtime/PMACLexer.cpp
+    ${PROJECT_SOURCE_DIR}/interpreter/antlr4-runtime/PMACParser.cpp
+    ${PROJECT_SOURCE_DIR}/interpreter/antlr4-runtime/PMACBaseVisitor.cpp
+    ${PROJECT_SOURCE_DIR}/interpreter/antlr4-runtime/PMACVisitor.cpp
 )
-foreach( src_file ${GENERATED_SRC} )
+foreach(src_file ${GENERATED_SRC} )
     set_source_files_properties(
         ${src_file}
         PROPERTIES
         GENERATED TRUE
     )
-endforeach( src_file ${GENERATED_SRC} )
+endforeach(src_file ${GENERATED_SRC} )
 include_directories(
-  ${PROJECT_SOURCE_DIR}/interpreter/antlr4-runtime/
-  ${PROJECT_SOURCE_DIR}/interpreter/antlr4-runtime/misc
-  ${PROJECT_SOURCE_DIR}/interpreter/antlr4-runtime/atn
-  ${PROJECT_SOURCE_DIR}/interpreter/antlr4-runtime/dfa
-  ${PROJECT_SOURCE_DIR}/interpreter/antlr4-runtime/tree
-  ${PROJECT_SOURCE_DIR}/interpreter/antlr4-runtime/support
-  ${PROJECT_SOURCE_DIR}/interpreter/
-  ${PROJECT_SOURCE_DIR}/interpreter/libs/
-  ${PROJECT_SOURCE_DIR}/interpreter/include
+    # Interpreter
+    ${PROJECT_SOURCE_DIR}/interpreter/antlr4-runtime/
+    ${PROJECT_SOURCE_DIR}/interpreter/antlr4-runtime/misc
+    ${PROJECT_SOURCE_DIR}/interpreter/antlr4-runtime/atn
+    ${PROJECT_SOURCE_DIR}/interpreter/antlr4-runtime/dfa
+    ${PROJECT_SOURCE_DIR}/interpreter/antlr4-runtime/tree
+    ${PROJECT_SOURCE_DIR}/interpreter/antlr4-runtime/support
+    ${PROJECT_SOURCE_DIR}/interpreter/
+    ${PROJECT_SOURCE_DIR}/interpreter/libs/
+    ${PROJECT_SOURCE_DIR}/interpreter/include
+    # Nori include files
+    ${CMAKE_CURRENT_SOURCE_DIR}/visualizer/include
+    ${GLFW_INCLUDE_DIR}
+    # GLEW library for accessing OpenGL functions
+    ${GLEW_INCLUDE_DIR}
+    # NanoVG drawing library
+    ${NANOVG_INCLUDE_DIR}
+    # NanoGUI user interface library
+    ${NANOGUI_INCLUDE_DIR}
+    ${NANOGUI_EXTRA_INCS}
 )
-set(PMAC-Interpreter_SRC
-    # Header files
-    interpreter/include/interpreter/Environment.h
-    interpreter/include/interpreter/Visitor.h
 
-    # Source files
-    interpreter/src/Environment.cpp
-    interpreter/src/Visitor.cpp
-    ${GENERATED_SRC}
-)
 if (NOT CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
     set (flags_1 "-Wno-overloaded-virtual")
 else()
     set (flags_1 "-MP /wd4251")
 endif()
 
-
-add_subdirectory(visualizer/ext visualizer/ext_build)
-
-include_directories(
-  # Nori include files
-  ${CMAKE_CURRENT_SOURCE_DIR}/visualizer/include
-  ${GLFW_INCLUDE_DIR}
-  # GLEW library for accessing OpenGL functions
-  ${GLEW_INCLUDE_DIR}
-  # NanoVG drawing library
-  ${NANOVG_INCLUDE_DIR}
-  # NanoGUI user interface library
-  ${NANOGUI_INCLUDE_DIR}
-  ${NANOGUI_EXTRA_INCS}
-)
-
 add_executable(PMAC-Visualizer
     ${PMAC-Interpreter_SRC}
     # Header files
     visualizer/include/visualizer/grid.h
     visualizer/include/visualizer/PMACVisualizerApplication.h
+    interpreter/include/interpreter/Environment.h
+    interpreter/include/interpreter/Visitor.h
+
 
     # Source files
-    #src/grid.cpp
+    # Visualizer
     visualizer/src/PMACVisualizerApplication.cpp
+    # Interpreter
+    interpreter/src/Environment.cpp
+    interpreter/src/Visitor.cpp
+    ${GENERATED_SRC}
     src/main.cpp
 )
 
