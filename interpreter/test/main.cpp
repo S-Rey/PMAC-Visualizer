@@ -283,7 +283,7 @@ TEST(Visitor, condition) {
     EXPECT_EQ(visitor.env.getValue("M9"), 1);
 }
 
-TEST(Visitor, expression){
+TEST(Visitor, expression) {
     std::string program =
         // Test precedence of operations
         "\n"    "M1 = 0 + -1"
@@ -296,6 +296,39 @@ TEST(Visitor, expression){
     EXPECT_EQ(visitor.env.getValue("M2"), 0);
     EXPECT_EQ(visitor.env.getValue("M3"), -0.5);
 
+}
+
+TEST(Lazer, axisAttr) {
+    std::string program =
+        "\n"    "INC(Y, Z)"
+        //"\n"    "FRAX(B)"     // Not yet implemented
+        "\n"    "ABS(Y, Z)"
+        "\n"    "INC(Y, Z)"
+        "\n"    "X(3)"
+        ;
+    Visitor visitor = Visitor();
+    runProgram (visitor, program);
+    std::map<Lazer::Axis, Lazer::AxisState> axisSates = visitor.env.lazer.getAxisStates();
+    EXPECT_EQ(axisSates.at(Lazer::Y).attr, Lazer::INC);
+    EXPECT_EQ(axisSates.at(Lazer::Z).attr, Lazer::INC);
+    //EXPECT_EQ(axisSates.at(Lazer::B).attr, Lazer::FRAX); // Not yet implemented
+    EXPECT_EQ(axisSates.at(Lazer::X).attr, Lazer::ABS);
+}
+
+TEST(Lazer, moveCmds) {
+    std::string program =
+        "\n"    "INC(Y, Z)"
+        "\n"    "Y(-1) Z(-1)"
+        "\n"    "ABS(Y)"
+        "\n"    "Y(0.3) Z(0.3)"
+        ;
+    Visitor visitor = Visitor();
+    runProgram (visitor, program);
+    std::vector<Lazer::MoveCmd> moveCmds = visitor.env.lazer.getMoveCmds();
+    EXPECT_EQ(moveCmds.at(0).axisPoses.at(Lazer::Y), -1);
+    EXPECT_EQ(moveCmds.at(0).axisPoses.at(Lazer::Z), -1);
+    EXPECT_EQ(moveCmds.at(1).axisPoses.at(Lazer::Y), 0.3);
+    EXPECT_EQ(moveCmds.at(1).axisPoses.at(Lazer::Z), -0.7);
 }
 
 int main(int argc, char **argv) {

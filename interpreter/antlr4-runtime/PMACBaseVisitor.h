@@ -59,15 +59,39 @@ public:
     return visitChildren(ctx);
   }
 
+  virtual antlrcpp::Any visitMoveCmds(PMACParser::MoveCmdsContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitMoveCmdSimple(PMACParser::MoveCmdSimpleContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitMoveCmdVelocity(PMACParser::MoveCmdVelocityContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitAxisAttrCmds(PMACParser::AxisAttrCmdsContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
   virtual antlrcpp::Any visitExpr(PMACParser::ExprContext *ctx) override {
     return visitChildren(ctx);
   }
 
-  virtual antlrcpp::Any visitComparator(PMACParser::ComparatorContext *ctx) override {
+  virtual antlrcpp::Any visitModeMoveCmds(PMACParser::ModeMoveCmdsContext *ctx) override {
     return visitChildren(ctx);
   }
 
   virtual antlrcpp::Any visitAxis(PMACParser::AxisContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitVectorCoordinate(PMACParser::VectorCoordinateContext *ctx) override {
+    return visitChildren(ctx);
+  }
+
+  virtual antlrcpp::Any visitComparator(PMACParser::ComparatorContext *ctx) override {
     return visitChildren(ctx);
   }
 

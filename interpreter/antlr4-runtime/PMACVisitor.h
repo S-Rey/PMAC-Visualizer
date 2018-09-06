@@ -41,11 +41,23 @@ public:
 
     virtual antlrcpp::Any visitAssign(PMACParser::AssignContext *context) = 0;
 
+    virtual antlrcpp::Any visitMoveCmds(PMACParser::MoveCmdsContext *context) = 0;
+
+    virtual antlrcpp::Any visitMoveCmdSimple(PMACParser::MoveCmdSimpleContext *context) = 0;
+
+    virtual antlrcpp::Any visitMoveCmdVelocity(PMACParser::MoveCmdVelocityContext *context) = 0;
+
+    virtual antlrcpp::Any visitAxisAttrCmds(PMACParser::AxisAttrCmdsContext *context) = 0;
+
     virtual antlrcpp::Any visitExpr(PMACParser::ExprContext *context) = 0;
 
-    virtual antlrcpp::Any visitComparator(PMACParser::ComparatorContext *context) = 0;
+    virtual antlrcpp::Any visitModeMoveCmds(PMACParser::ModeMoveCmdsContext *context) = 0;
 
     virtual antlrcpp::Any visitAxis(PMACParser::AxisContext *context) = 0;
+
+    virtual antlrcpp::Any visitVectorCoordinate(PMACParser::VectorCoordinateContext *context) = 0;
+
+    virtual antlrcpp::Any visitComparator(PMACParser::ComparatorContext *context) = 0;
 
     virtual antlrcpp::Any visitAtom(PMACParser::AtomContext *context) = 0;
 

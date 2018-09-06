@@ -38,8 +38,12 @@ antlrcpp::Any Visitor::visitAction(PMACParser::ActionContext *ctx) {
     } else if (ctx->leftAction && ctx->rightAction) {
         this->visitAction(ctx->leftAction);
         this->visitAction(ctx->rightAction);
+    } else if (ctx->moveCmds()) {
+        this->visitMoveCmds(ctx->moveCmds());
+    } else if (ctx->axisAttrCmds()) {
+        this->visitAxisAttrCmds(ctx->axisAttrCmds());
     } else {
-        throw std::invalid_argument("Action error");
+        throw std::invalid_argument("visitAction() error");
     }
     return antlrcpp::Any();
 }
@@ -134,6 +138,35 @@ antlrcpp::Any Visitor::visitAssign(PMACParser::AssignContext *ctx) {
     double expr = this->visitExpr(ctx->expr()).as<double>();
     this->env.setVariable(ctx->var()->getText(), expr);
     //std::cout << ctx->var()->getText() << " = " << expr << std::endl << std::flush;
+    return antlrcpp::Any();
+}
+
+
+antlrcpp::Any Visitor::visitMoveCmds(PMACParser::MoveCmdsContext *ctx) {
+    // Simple commands
+    for(auto line: ctx->listSimple) {
+        double value = this->visitExpr(line->expr()).as<double>();
+        env.lazer.setAxisPos(getAxis(line->axis()), value);
+    }
+    env.lazer.updateMoveCmds();
+    return antlrcpp::Any();
+}
+
+
+antlrcpp::Any Visitor::visitAxisAttrCmds(PMACParser::AxisAttrCmdsContext *ctx) {
+    if (ctx->ABS()) {
+        for (auto axis: ctx->axisList) {
+            env.lazer.setAxisAttribute(getAxis(axis), Lazer::ABS);
+        }
+    } else if (ctx->INC()) {
+        for (auto axis: ctx->axisList) {
+            env.lazer.setAxisAttribute(getAxis(axis), Lazer::INC);
+        }
+    } else if (ctx->FRAX()) {
+        for (auto axis: ctx->axisList) {
+            env.lazer.setAxisAttribute(getAxis(axis), Lazer::FRAX);
+        }
+    }
     return antlrcpp::Any();
 }
 
@@ -245,4 +278,18 @@ antlrcpp::Any Visitor::visitNumber(PMACParser::NumberContext *ctx) {
 
 antlrcpp::Any Visitor::visitVar(PMACParser::VarContext *ctx) {
     return PMACBaseVisitor::visitVar(ctx);
+}
+
+
+
+
+Lazer::Axis getAxis(PMACParser::AxisContext*  axis) {
+    if (axis->AX_X()) {
+        return Lazer::X;
+    } else if (axis->AX_Y()) {
+        return Lazer::Y;
+    } else if (axis->AX_Z()) {
+        return Lazer::Z;
+    }
+    return Lazer::Axis();
 }

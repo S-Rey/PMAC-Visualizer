@@ -16,19 +16,24 @@ public:
     Q_VAR = 8, P_VAR = 9, I_VAR = 10, M_VAR = 11, SIN = 12, COS = 13, TAN = 14, 
     ASIN = 15, ACOS = 16, ATAN = 17, ATAN2 = 18, LN = 19, EXP = 20, SQRT = 21, 
     ABS = 22, INT = 23, LINEAR = 24, RAPID = 25, CIRCLE1 = 26, CIRCLE2 = 27, 
-    SPLINE1 = 28, SPLINE2 = 29, CC0 = 30, CC1 = 31, CC2 = 32, CC3 = 33, 
-    AX_X = 34, AX_Y = 35, AX_Z = 36, AX_A = 37, AX_B = 38, AX_C = 39, AX_U = 40, 
-    AX_V = 41, AX_W = 42, INTEGER = 43, DECIMAL = 44, HEX = 45, PLUS = 46, 
-    MIN = 47, MULT = 48, DIV = 49, MOD = 50, AND_OP = 51, OR_OP = 52, XOR = 53, 
-    EQ = 54, NEQ = 55, LT = 56, GT = 57, NLT = 58, NGT = 59, LPAR = 60, 
-    RPAR = 61, NL = 62, COMMENT = 63, WS = 64
+    PVT = 28, SPLINE1 = 29, SPLINE2 = 30, CC0 = 31, CC1 = 32, CC2 = 33, 
+    CC3 = 34, DWELL = 35, DELAY = 36, HOME = 37, HOMEZ = 38, INC = 39, FRAX = 40, 
+    NOFRAX = 41, NORMAL = 42, PSET = 43, AX_X = 44, AX_Y = 45, AX_Z = 46, 
+    AX_A = 47, AX_B = 48, AX_C = 49, AX_U = 50, AX_V = 51, AX_W = 52, V_I = 53, 
+    V_J = 54, V_K = 55, RADIUS = 56, INTEGER = 57, DECIMAL = 58, HEX = 59, 
+    PLUS = 60, MIN = 61, MULT = 62, DIV = 63, MOD = 64, AND_OP = 65, OR_OP = 66, 
+    XOR = 67, EQ = 68, NEQ = 69, LT = 70, GT = 71, NLT = 72, NGT = 73, LPAR = 74, 
+    RPAR = 75, COLON = 76, SEMIOLON = 77, COMMA = 78, NL = 79, COMMENT = 80, 
+    WS = 81
   };
 
   enum {
     RuleProgram = 0, RuleLine = 1, RuleStatement = 2, RuleAction = 3, RuleIfStatement = 4, 
     RuleWhileStatement = 5, RuleCompoundCondition = 6, RuleCondition = 7, 
-    RuleData = 8, RuleConstant = 9, RuleAssign = 10, RuleExpr = 11, RuleComparator = 12, 
-    RuleAxis = 13, RuleAtom = 14, RuleNumber = 15, RuleVar = 16, RuleFunction = 17
+    RuleData = 8, RuleConstant = 9, RuleAssign = 10, RuleMoveCmds = 11, 
+    RuleMoveCmdSimple = 12, RuleMoveCmdVelocity = 13, RuleAxisAttrCmds = 14, 
+    RuleExpr = 15, RuleModeMoveCmds = 16, RuleAxis = 17, RuleVectorCoordinate = 18, 
+    RuleComparator = 19, RuleAtom = 20, RuleNumber = 21, RuleVar = 22, RuleFunction = 23
   };
 
   PMACParser(antlr4::TokenStream *input);
@@ -52,9 +57,15 @@ public:
   class DataContext;
   class ConstantContext;
   class AssignContext;
+  class MoveCmdsContext;
+  class MoveCmdSimpleContext;
+  class MoveCmdVelocityContext;
+  class AxisAttrCmdsContext;
   class ExprContext;
-  class ComparatorContext;
+  class ModeMoveCmdsContext;
   class AxisContext;
+  class VectorCoordinateContext;
+  class ComparatorContext;
   class AtomContext;
   class NumberContext;
   class VarContext;
@@ -110,6 +121,8 @@ public:
     ActionContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     AssignContext *assign();
+    MoveCmdsContext *moveCmds();
+    AxisAttrCmdsContext *axisAttrCmds();
     std::vector<ActionContext *> action();
     ActionContext* action(size_t i);
 
@@ -236,7 +249,8 @@ public:
     AssignContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     VarContext *var();
-    antlr4::tree::TerminalNode *EQ();
+    std::vector<antlr4::tree::TerminalNode *> EQ();
+    antlr4::tree::TerminalNode* EQ(size_t i);
     ExprContext *expr();
 
     virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
@@ -244,6 +258,78 @@ public:
   };
 
   AssignContext* assign();
+
+  class  MoveCmdsContext : public antlr4::ParserRuleContext {
+  public:
+    PMACParser::MoveCmdSimpleContext *moveCmdSimpleContext = nullptr;;
+    std::vector<MoveCmdSimpleContext *> listSimple;;
+    PMACParser::MoveCmdVelocityContext *moveCmdVelocityContext = nullptr;;
+    std::vector<MoveCmdVelocityContext *> listVelocity;;
+    MoveCmdsContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    std::vector<MoveCmdSimpleContext *> moveCmdSimple();
+    MoveCmdSimpleContext* moveCmdSimple(size_t i);
+    std::vector<MoveCmdVelocityContext *> moveCmdVelocity();
+    MoveCmdVelocityContext* moveCmdVelocity(size_t i);
+    ModeMoveCmdsContext *modeMoveCmds();
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  MoveCmdsContext* moveCmds();
+
+  class  MoveCmdSimpleContext : public antlr4::ParserRuleContext {
+  public:
+    MoveCmdSimpleContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    AxisContext *axis();
+    ExprContext *expr();
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  MoveCmdSimpleContext* moveCmdSimple();
+
+  class  MoveCmdVelocityContext : public antlr4::ParserRuleContext {
+  public:
+    PMACParser::ExprContext *position = nullptr;;
+    PMACParser::ExprContext *velocity = nullptr;;
+    MoveCmdVelocityContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    AxisContext *axis();
+    antlr4::tree::TerminalNode *COLON();
+    std::vector<ExprContext *> expr();
+    ExprContext* expr(size_t i);
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  MoveCmdVelocityContext* moveCmdVelocity();
+
+  class  AxisAttrCmdsContext : public antlr4::ParserRuleContext {
+  public:
+    PMACParser::AxisContext *axisContext = nullptr;;
+    std::vector<AxisContext *> axisList;;
+    AxisAttrCmdsContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *ABS();
+    antlr4::tree::TerminalNode *LPAR();
+    antlr4::tree::TerminalNode *RPAR();
+    std::vector<AxisContext *> axis();
+    AxisContext* axis(size_t i);
+    std::vector<antlr4::tree::TerminalNode *> COMMA();
+    antlr4::tree::TerminalNode* COMMA(size_t i);
+    antlr4::tree::TerminalNode *INC();
+    antlr4::tree::TerminalNode *FRAX();
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  AxisAttrCmdsContext* axisAttrCmds();
 
   class  ExprContext : public antlr4::ParserRuleContext {
   public:
@@ -276,6 +362,63 @@ public:
 
   ExprContext* expr();
   ExprContext* expr(int precedence);
+  class  ModeMoveCmdsContext : public antlr4::ParserRuleContext {
+  public:
+    ModeMoveCmdsContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *LINEAR();
+    antlr4::tree::TerminalNode *RAPID();
+    antlr4::tree::TerminalNode *CIRCLE1();
+    antlr4::tree::TerminalNode *CIRCLE2();
+    antlr4::tree::TerminalNode *PVT();
+    antlr4::tree::TerminalNode *SPLINE1();
+    antlr4::tree::TerminalNode *SPLINE2();
+    antlr4::tree::TerminalNode *CC0();
+    antlr4::tree::TerminalNode *CC1();
+    antlr4::tree::TerminalNode *CC2();
+    antlr4::tree::TerminalNode *CC3();
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  ModeMoveCmdsContext* modeMoveCmds();
+
+  class  AxisContext : public antlr4::ParserRuleContext {
+  public:
+    AxisContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *AX_X();
+    antlr4::tree::TerminalNode *AX_Y();
+    antlr4::tree::TerminalNode *AX_Z();
+    antlr4::tree::TerminalNode *AX_A();
+    antlr4::tree::TerminalNode *AX_B();
+    antlr4::tree::TerminalNode *AX_C();
+    antlr4::tree::TerminalNode *AX_U();
+    antlr4::tree::TerminalNode *AX_V();
+    antlr4::tree::TerminalNode *AX_W();
+    antlr4::tree::TerminalNode *RADIUS();
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  AxisContext* axis();
+
+  class  VectorCoordinateContext : public antlr4::ParserRuleContext {
+  public:
+    VectorCoordinateContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *V_I();
+    antlr4::tree::TerminalNode *V_J();
+    antlr4::tree::TerminalNode *V_K();
+
+    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
+   
+  };
+
+  VectorCoordinateContext* vectorCoordinate();
+
   class  ComparatorContext : public antlr4::ParserRuleContext {
   public:
     ComparatorContext(antlr4::ParserRuleContext *parent, size_t invokingState);
@@ -292,26 +435,6 @@ public:
   };
 
   ComparatorContext* comparator();
-
-  class  AxisContext : public antlr4::ParserRuleContext {
-  public:
-    AxisContext(antlr4::ParserRuleContext *parent, size_t invokingState);
-    virtual size_t getRuleIndex() const override;
-    antlr4::tree::TerminalNode *AX_X();
-    antlr4::tree::TerminalNode *AX_Y();
-    antlr4::tree::TerminalNode *AX_Z();
-    antlr4::tree::TerminalNode *AX_A();
-    antlr4::tree::TerminalNode *AX_B();
-    antlr4::tree::TerminalNode *AX_C();
-    antlr4::tree::TerminalNode *AX_U();
-    antlr4::tree::TerminalNode *AX_V();
-    antlr4::tree::TerminalNode *AX_W();
-
-    virtual antlrcpp::Any accept(antlr4::tree::ParseTreeVisitor *visitor) override;
-   
-  };
-
-  AxisContext* axis();
 
   class  AtomContext : public antlr4::ParserRuleContext {
   public:

@@ -33,10 +33,12 @@ include_directories(
 
 set(PMAC-Interpreter_SRC
     # Header files
+    include/interpreter/lazer.h
     include/interpreter/Environment.h
     include/interpreter/Visitor.h
 
     # Source files
+    src/lazer.cpp
     src/Environment.cpp
     src/Visitor.cpp
     ${GENERATED_SRC}

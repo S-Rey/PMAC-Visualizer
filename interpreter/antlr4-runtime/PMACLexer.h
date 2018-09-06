@@ -16,12 +16,15 @@ public:
     Q_VAR = 8, P_VAR = 9, I_VAR = 10, M_VAR = 11, SIN = 12, COS = 13, TAN = 14, 
     ASIN = 15, ACOS = 16, ATAN = 17, ATAN2 = 18, LN = 19, EXP = 20, SQRT = 21, 
     ABS = 22, INT = 23, LINEAR = 24, RAPID = 25, CIRCLE1 = 26, CIRCLE2 = 27, 
-    SPLINE1 = 28, SPLINE2 = 29, CC0 = 30, CC1 = 31, CC2 = 32, CC3 = 33, 
-    AX_X = 34, AX_Y = 35, AX_Z = 36, AX_A = 37, AX_B = 38, AX_C = 39, AX_U = 40, 
-    AX_V = 41, AX_W = 42, INTEGER = 43, DECIMAL = 44, HEX = 45, PLUS = 46, 
-    MIN = 47, MULT = 48, DIV = 49, MOD = 50, AND_OP = 51, OR_OP = 52, XOR = 53, 
-    EQ = 54, NEQ = 55, LT = 56, GT = 57, NLT = 58, NGT = 59, LPAR = 60, 
-    RPAR = 61, NL = 62, COMMENT = 63, WS = 64
+    PVT = 28, SPLINE1 = 29, SPLINE2 = 30, CC0 = 31, CC1 = 32, CC2 = 33, 
+    CC3 = 34, DWELL = 35, DELAY = 36, HOME = 37, HOMEZ = 38, INC = 39, FRAX = 40, 
+    NOFRAX = 41, NORMAL = 42, PSET = 43, AX_X = 44, AX_Y = 45, AX_Z = 46, 
+    AX_A = 47, AX_B = 48, AX_C = 49, AX_U = 50, AX_V = 51, AX_W = 52, V_I = 53, 
+    V_J = 54, V_K = 55, RADIUS = 56, INTEGER = 57, DECIMAL = 58, HEX = 59, 
+    PLUS = 60, MIN = 61, MULT = 62, DIV = 63, MOD = 64, AND_OP = 65, OR_OP = 66, 
+    XOR = 67, EQ = 68, NEQ = 69, LT = 70, GT = 71, NLT = 72, NGT = 73, LPAR = 74, 
+    RPAR = 75, COLON = 76, SEMIOLON = 77, COMMA = 78, NL = 79, COMMENT = 80, 
+    WS = 81
   };
 
   PMACLexer(antlr4::CharStream *input);

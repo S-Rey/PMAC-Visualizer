@@ -21,6 +21,8 @@ statement
 
 action
     : assign
+    | moveCmds
+    | axisAttrCmds
     | leftAction=action rightAction=action
     ;
 
@@ -59,8 +61,34 @@ constant
     ;
 
 assign
-    : var EQ expr
+    : var EQ EQ expr
+    | var EQ expr
     ;
+
+moveCmds
+	: (listSimple+=moveCmdSimple)+						// LINEAR, RAPID, SPLINE
+	| (listVelocity+=moveCmdVelocity)+ 						// PVT
+	//| (axis position+=expr caret=XOR expr)+ 			// RAPID
+	//| (axis expr)+ (vectorCoordinate expr)+			// CIRCLE
+	//| (axis expr)+ RADIUS expr						// CIRCLE
+	| modeMoveCmds
+	;
+
+moveCmdSimple
+	: (axis expr)
+	;
+
+moveCmdVelocity
+	: (axis position=expr COLON velocity=expr)
+	;
+
+
+axisAttrCmds
+	: ABS (LPAR axisList+=axis (COMMA axisList+=axis)* RPAR)?
+	| INC (LPAR axisList+=axis (COMMA axisList+=axis)* RPAR)?
+	| FRAX (LPAR axisList+=axis (COMMA axisList+=axis)* RPAR)?
+	;
+
 
 expr
     : LPAR center=expr RPAR
@@ -74,14 +102,19 @@ expr
     | atom
     ;
 
-comparator
-    : EQ
-    | NEQ
-    | LT
-    | GT
-    | NLT
-    | NGT
-    ;
+modeMoveCmds
+	: LINEAR
+	| RAPID
+	| CIRCLE1
+	| CIRCLE2
+	| PVT
+	| SPLINE1
+	| SPLINE2
+	| CC0
+	| CC1
+	| CC2
+	| CC3
+	;
 
 axis
     : AX_X
@@ -93,6 +126,22 @@ axis
     | AX_U
     | AX_V
     | AX_W
+    | RADIUS
+    ;
+
+vectorCoordinate
+	: V_I
+	| V_J
+	| V_K
+	;
+
+comparator
+    : EQ
+    | NEQ
+    | LT
+    | GT
+    | NLT
+    | NGT
     ;
 
 atom
@@ -165,13 +214,27 @@ LINEAR  : L I N E A R    ;
 RAPID   : R A P I D      ;
 CIRCLE1 : C I R C L E '1';
 CIRCLE2 : C I R C L E '2';
-//PVT
+PVT     : P V T			 ;
 SPLINE1 : S P L I N E '1';
 SPLINE2 : S P L I N E '2';
 CC0     : C C '0'        ;
 CC1     : C C '1'        ;
 CC2     : C C '2'        ;
 CC3     : C C '3'        ;
+
+DWELL   : D W E L L 	 ;
+DELAY   : D E L A Y 	 ;
+HOME    : H O M E        ;
+HOMEZ   : H O M E Z      ;
+
+
+// Axis attribute commands
+INC : I N C;
+FRAX : F R A X;
+NOFRAX : N O F R A X;
+NORMAL : N O R M A L;
+PSET : P S E T;
+
 
 // Axis
 AX_X : X;
@@ -183,6 +246,14 @@ AX_C : C;
 AX_U : U;
 AX_V : V;
 AX_W : W;
+
+// Vector Coordinates
+V_I : I;
+V_J : J;
+V_K : K;
+
+// Radius
+RADIUS : R;
 
 // Numbers
 fragment DIGIT    : [0-9];
@@ -212,6 +283,11 @@ NGT   : '!>';
 // Parenthesis
 LPAR  : '(' ;
 RPAR  : ')' ;
+
+// Other
+COLON 	 : ':';
+SEMIOLON : ';';
+COMMA	 : ',';
 
 // White spaces and newlines
 NL      : '\n'                ;

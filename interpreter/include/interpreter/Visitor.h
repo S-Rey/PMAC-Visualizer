@@ -17,10 +17,14 @@ public:
     antlrcpp::Any visitCompoundCondition(PMACParser::CompoundConditionContext *ctx) override;
     antlrcpp::Any visitCondition(PMACParser::ConditionContext *ctx) override;
     antlrcpp::Any visitAssign(PMACParser::AssignContext *ctx) override;
+    antlrcpp::Any visitMoveCmds(PMACParser::MoveCmdsContext *ctx) override;
+    antlrcpp::Any visitAxisAttrCmds(PMACParser::AxisAttrCmdsContext *ctx) override;
     antlrcpp::Any visitExpr(PMACParser::ExprContext *ctx) override;
     antlrcpp::Any visitAtom(PMACParser::AtomContext *ctx) override;
     antlrcpp::Any visitNumber(PMACParser::NumberContext *ctx) override;
     antlrcpp::Any visitVar(PMACParser::VarContext *ctx) override;
-//private:
-    Environment env = Environment();
+
+    Environment env;
 };
+
+Lazer::Axis getAxis(PMACParser::AxisContext*  axis);

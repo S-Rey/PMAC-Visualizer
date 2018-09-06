@@ -1,8 +1,12 @@
-IF (M11=1)
-AND (M12=0)
-OR (M11=0)
-AND (M12=1)
-   P1=P1+1
-ELSE
-   P1=P1-1
-ENDIF
+;IF (M11=1)
+;AND (M12=0)
+;OR (M11=0)
+;AND (M12=1)
+;   P1=P1+1
+;ELSE
+;   P1=P1-1
+;ENDIF
+
+X(123)
+INC(Y, Z)
+FRAX(B)
