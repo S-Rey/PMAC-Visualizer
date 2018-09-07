@@ -58,6 +58,7 @@ add_executable(PMAC-Visualizer
     # Header files
     visualizer/include/visualizer/grid.h
     visualizer/include/visualizer/PMACVisualizerApplication.h
+    interpreter/include/interpreter/lazer.h
     interpreter/include/interpreter/Environment.h
     interpreter/include/interpreter/Visitor.h
 
@@ -66,6 +67,7 @@ add_executable(PMAC-Visualizer
     # Visualizer
     visualizer/src/PMACVisualizerApplication.cpp
     # Interpreter
+    interpreter/src/lazer.cpp
     interpreter/src/Environment.cpp
     interpreter/src/Visitor.cpp
     ${GENERATED_SRC}

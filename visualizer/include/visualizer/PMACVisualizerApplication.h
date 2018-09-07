@@ -9,6 +9,9 @@
 
 #include <visualizer/grid.h>
 
+// Used to get std::vector<moveCmds>
+#include <interpreter/lazer.h>
+
 
 #if defined(__GNUC__)
 #  pragma GCC diagnostic ignored "-Wmissing-field-initializers"
@@ -123,6 +126,8 @@ public:
 
     nanogui::Matrix4f rotate(const nanogui::Vector3f &axis, float angle);
 
+    void setMoveCmds(std::vector<Lazer::MoveCmd> moveCmds);
+
     virtual void drawContents();
 
 private:
@@ -149,4 +154,12 @@ private:
     bool orthographic = true;
     // MVP matrix
     nanogui::Matrix4f mvp;
+
+
+    // Commands
+    std::vector<Lazer::MoveCmd> mMoveCmds;
+    void computeMoveCmds();
+    nanogui::MatrixXu mIndices;
+    nanogui::MatrixXf mPositions;
+
 };

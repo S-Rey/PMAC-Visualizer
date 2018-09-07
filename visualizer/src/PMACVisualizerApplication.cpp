@@ -212,6 +212,95 @@ nanogui::Matrix4f PMACVisualizerApplication::rotate(const nanogui::Vector3f &axi
     return Eigen::Affine3f(Eigen::AngleAxisf(angle, axis.normalized())).matrix();
 }
 
+void PMACVisualizerApplication::setMoveCmds(std::vector<Lazer::MoveCmd> moveCmds) {
+    mMoveCmds = moveCmds;
+    computeMoveCmds();
+
+    mShader.bind();
+    mShader.uploadIndices(mIndices);
+
+    mShader.uploadAttrib("position", mPositions);
+    std::cout << "Positions Matrix: \n"<< mPositions << std::endl;
+    std::cout << "Indices Matrix: \n"<< mIndices << std::endl;
+}
+
+/**
+ * This function initializes the positions and indices matrices.
+ * It runs through the moveCmds vector and add any position that
+ * has at least one of its neighboors active (lazer on).
+ */
+void PMACVisualizerApplication::computeMoveCmds() {
+    if(mMoveCmds.empty()) return;
+
+    //bool prevOn = false;    // if the last position was on
+    //size_t curr_indice = 0;
+    //for (size_t i = 0; i < mMoveCmds.size(); ++i) {
+    //    // if the lazer is on, add this positions
+    //    if(mMoveCmds.at(i).toggle) {
+    //        if (prevOn) {   // if this position and the last position are active (=> 'lazer on')
+    //            Eigen::Vector3d position;
+    //            double x = mMoveCmds.at(i-1).axisPoses.at(Lazer::X);
+    //            double y = mMoveCmds.at(i-1).axisPoses.at(Lazer::Y);
+    //            double z = mMoveCmds.at(i-1).axisPoses.at(Lazer::Z);
+    //            position.col(0) << x, y, z;
+    //            cmdPositions.push_back(position);
+    //            x = mMoveCmds.at(i).axisPoses.at(Lazer::X);
+    //            y = mMoveCmds.at(i).axisPoses.at(Lazer::Y);
+    //            z = mMoveCmds.at(i).axisPoses.at(Lazer::Z);
+    //            position.col(0) << x, y, z;
+    //            cmdPositions.push_back(position);
+    //            Eigen::Vector2i cmdIndice;
+    //            cmdIndice.col(0) << curr_indice-1, curr_indice;
+    //            cmdIndices.push_back(cmdIndice);
+    //            ++curr_indice;
+    //        } else {
+    //            prevOn = true;
+    //            ++curr_indice;
+    //        }
+    //    } else {
+    //        prevOn = false;
+    //    }
+    //}
+
+    std::vector<Eigen::Vector3d> cmdPositions;
+    std::vector<Eigen::Vector2i> cmdIndices;
+    size_t index = 0;
+    for (size_t i = 0; i < mMoveCmds.size()-1; ++i) {
+        if(mMoveCmds.at(i).toggle && mMoveCmds.at(i+1).toggle) {
+            Eigen::Vector3d position;
+            double x = mMoveCmds.at(i).axisPoses.at(Lazer::X);
+            double y = mMoveCmds.at(i).axisPoses.at(Lazer::Y);
+            double z = mMoveCmds.at(i).axisPoses.at(Lazer::Z);
+            position.col(0) << x, y, z;
+            cmdPositions.push_back(position);
+
+            x = mMoveCmds.at(i+1).axisPoses.at(Lazer::X);
+            y = mMoveCmds.at(i+1).axisPoses.at(Lazer::Y);
+            z = mMoveCmds.at(i+1).axisPoses.at(Lazer::Z);
+            position.col(0) << x, y, z;
+            cmdPositions.push_back(position);
+
+            Eigen::Vector2i indices;
+            indices.col(0) << index, index+1;
+            cmdIndices.push_back(indices);
+            index+=2;
+        }
+    }
+
+    // Inizialize mPositions and mIndices
+    mPositions = nanogui::MatrixXf(3, cmdPositions.size());
+    mIndices = nanogui::MatrixXu(2, cmdIndices.size());
+    for (size_t i = 0; i < cmdPositions.size(); ++i) {
+        mPositions.col(i) << cmdPositions.at(i).x(),
+                             cmdPositions.at(i).y(),
+                             cmdPositions.at(i).z();
+    }
+    for (size_t i = 0; i < cmdIndices.size(); ++i) {
+        mIndices.col(i) << cmdIndices.at(i).x(),
+                           cmdIndices.at(i).y();
+    }
+
+}
 
 void PMACVisualizerApplication::drawContents() {
     using namespace nanogui;
@@ -221,9 +310,9 @@ void PMACVisualizerApplication::drawContents() {
     glEnable(GL_DEPTH_TEST);
 
     ///* Draw 12 triangles starting at index 0 */
-    mShader.drawIndexed(GL_TRIANGLES, 0, 12);
-    ////glLineWidth(100);
-    ////mShader.drawIndexed(GL_LINES, 0, 12);
+    //mShader.drawIndexed(GL_TRIANGLES, 0, 12);
+    glLineWidth(100);
+    mShader.drawIndexed(GL_LINES, 0, 12);
     glDisable(GL_DEPTH_TEST);
     //mGrid.draw(mvp);
 
@@ -240,4 +329,5 @@ void PMACVisualizerApplication::drawContents() {
     //glDisable(GL_DEPTH_TEST);
     //mGrid.draw(mvp);
 }
+
 

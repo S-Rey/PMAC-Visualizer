@@ -41,12 +41,15 @@ int main() {
 
     Visitor visitor = Visitor();
     visitor.visitProgram(tree);
+    std::vector<Lazer::MoveCmd> moveCmds = visitor.env.lazer.getMoveCmds();
+
 
     try {
         nanogui::init();
 
         /* scoped variables */ {
             nanogui::ref<PMACVisualizerApplication> app = new PMACVisualizerApplication();
+            app->setMoveCmds(moveCmds);
             app->drawAll();
             app->setVisible(true);
             nanogui::mainloop();

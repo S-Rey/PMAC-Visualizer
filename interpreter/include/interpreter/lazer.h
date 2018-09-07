@@ -15,18 +15,18 @@ public:
     struct AxisState {
         AxisAttr attr;
         double value;
-        AxisState(AxisAttr attr, double value) {
-            this->attr = attr;
-            this->value = value;
-        }
+        AxisState(AxisAttr attr, double value) : attr(attr), value(value) {}
     };
 
     struct MoveCmd {
         std::map<Axis, double> axisPoses; // value always in absolute coordinate
         bool toggle;    // true : lazer on, false : lazer off
         double time;
+        MoveCmd() {}
+        MoveCmd(std::map<Axis, double> axisPoses, bool toggle, double time)
+            : axisPoses(axisPoses), toggle(toggle), time(time) {}
     };
-
+    
     Lazer();
     const std::map<Axis, AxisState>& getAxisStates() const;
     void setAxisPos(Axis axis, double value);
@@ -36,6 +36,6 @@ public:
     std::vector<MoveCmd> getMoveCmds() const;
 private:
     std::map<Axis, AxisState> mAxisSates;
-    bool mToggle;
+    bool mToggle = false;
     std::vector<MoveCmd> mMoveCmds;
 };
