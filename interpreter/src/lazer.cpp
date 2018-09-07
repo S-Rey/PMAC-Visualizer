@@ -4,6 +4,7 @@ Lazer::Lazer() {
     mAxisSates.insert(std::make_pair(Lazer::X, AxisState(Lazer::ABS, 0.0)));
     mAxisSates.insert(std::make_pair(Lazer::Y, AxisState(Lazer::ABS, 0.0)));
     mAxisSates.insert(std::make_pair(Lazer::Z, AxisState(Lazer::ABS, 0.0)));
+    updateMoveCmds();
 }
 
 const std::map<Lazer::Axis, Lazer::AxisState>& Lazer::getAxisStates() const {
