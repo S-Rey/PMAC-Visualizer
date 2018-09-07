@@ -1,10 +1,12 @@
 #pragma once
 
+#if defined(_WIN32)
+	#define _USE_MATH_DEFINES
+#endif
 #include "antlr4-runtime/antlr4-runtime.h"
 #include "antlr4-runtime/PMACBaseVisitor.h"
 #include "Environment.h"
 #include <string>
-#include <cmath>
 
 class  Visitor : PMACBaseVisitor {
 public:

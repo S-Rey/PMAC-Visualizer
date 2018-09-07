@@ -10,7 +10,13 @@ Environment::Environment() {
 void Environment::setVariable(const std::string& variable, double value) {
     // convert variable name to upper case as PMAC is case insentive
     std::string upVariable = variable;
-    for (auto & c: upVariable) c = static_cast<char>(std::toupper(c));
+
+	#if defined(_WIN32)
+		for (auto & c: upVariable) c = static_cast<char>(toupper(c));
+	#else
+		for (auto & c: upVariable) c = static_cast<char>(std::toupper(c));
+	#endif
+
     auto it = this->variables.find(upVariable);
     if (it != this->variables.end()) {
         it->second = value;
@@ -27,7 +33,13 @@ void Environment::setVariable(const std::string& variable, double value) {
 
 double Environment::getValue(std::string variable) {
     std::string upVariable = variable;
-    for (auto & c: upVariable) c = static_cast<char>(std::toupper(c));
+
+	#if defined(_WIN32)
+		for (auto & c: upVariable) c = static_cast<char>(toupper(c));
+	#else
+		for (auto & c: upVariable) c = static_cast<char>(std::toupper(c));
+	#endif
+
     auto it = this->variables.find(upVariable);
     if (it != this->variables.end()) {
         return it->second;
