@@ -325,10 +325,10 @@ TEST(Lazer, moveCmds) {
     Visitor visitor = Visitor();
     runProgram (visitor, program);
     std::vector<Lazer::MoveCmd> moveCmds = visitor.env.lazer.getMoveCmds();
-    EXPECT_EQ(moveCmds.at(0).axisPoses.at(Lazer::Y), -1);
-    EXPECT_EQ(moveCmds.at(0).axisPoses.at(Lazer::Z), -1);
-    EXPECT_EQ(moveCmds.at(1).axisPoses.at(Lazer::Y), 0.3);
-    EXPECT_EQ(moveCmds.at(1).axisPoses.at(Lazer::Z), -0.7);
+    EXPECT_EQ(moveCmds.at(1).axisPoses.at(Lazer::Y), -1);
+    EXPECT_EQ(moveCmds.at(1).axisPoses.at(Lazer::Z), -1);
+    EXPECT_EQ(moveCmds.at(2).axisPoses.at(Lazer::Y), 0.3);
+    EXPECT_EQ(moveCmds.at(2).axisPoses.at(Lazer::Z), -0.7);
 }
 
 int main(int argc, char **argv) {

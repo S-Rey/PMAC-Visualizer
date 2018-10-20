@@ -54,7 +54,6 @@ else()
 endif()
 
 add_executable(PMAC-Visualizer
-    ${PMAC-Interpreter_SRC}
     # Header files
     visualizer/include/visualizer/grid.h
     visualizer/include/visualizer/PMACVisualizerApplication.h
@@ -88,7 +87,6 @@ endif()
 if(WIN32)
   target_link_libraries(PMAC-Visualizer "${PROJECT_SOURCE_DIR}/interpreter/libs/antlr4-runtime.lib")
 endif()
-
 if(APPLE)
   target_link_libraries(PMAC-Visualizer "${PROJECT_SOURCE_DIR}/interpreter/libs/libantlr4-runtime.dylib")
 elseif(UNIX)

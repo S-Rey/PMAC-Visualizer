@@ -24,17 +24,14 @@
 #  include <windows.h>
 #endif
 
-using namespace std;
-using namespace antlr4;
-
 int main() {
 
     std::ifstream stream;
     stream.open("input.PMAC");
 
-    ANTLRInputStream input(stream);
+    antlr4::ANTLRInputStream input(stream);
     PMACLexer lexer(&input);
-    CommonTokenStream tokens(&lexer);
+    antlr4::CommonTokenStream tokens(&lexer);
     PMACParser parser(&tokens);
 
     PMACParser::ProgramContext* tree = parser.program();

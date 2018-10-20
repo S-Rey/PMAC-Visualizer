@@ -159,8 +159,12 @@ antlrcpp::Any Visitor::visitAxisAttrCmds(PMACParser::AxisAttrCmdsContext *ctx) {
             env.lazer.setAxisAttribute(getAxis(axis), Lazer::ABS);
         }
     } else if (ctx->INC()) {
-        for (auto axis: ctx->axisList) {
-            env.lazer.setAxisAttribute(getAxis(axis), Lazer::INC);
+        if (!ctx->axisList.empty()) {
+            for (auto axis: ctx->axisList) {
+                env.lazer.setAxisAttribute(getAxis(axis), Lazer::INC);
+            }
+        } else {
+        
         }
     } else if (ctx->FRAX()) {
         for (auto axis: ctx->axisList) {
