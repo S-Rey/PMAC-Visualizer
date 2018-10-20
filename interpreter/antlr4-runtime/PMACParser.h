@@ -77,7 +77,7 @@ public:
     std::vector<LineContext *> lines;;
     ProgramContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    antlr4::tree::TerminalNode *EOF();
+    antlr4::tree::TerminalNode *EOF_ANT();
     std::vector<LineContext *> line();
     LineContext* line(size_t i);
 

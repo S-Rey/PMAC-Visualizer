@@ -37,8 +37,8 @@ PMACParser::ProgramContext::ProgramContext(ParserRuleContext *parent, size_t inv
   : ParserRuleContext(parent, invokingState) {
 }
 
-tree::TerminalNode* PMACParser::ProgramContext::EOF() {
-  return getToken(PMACParser::EOF, 0);
+tree::TerminalNode* PMACParser::ProgramContext::EOF_ANT() {
+  return getToken(PMACParser::EOF_ANT, 0);
 }
 
 std::vector<PMACParser::LineContext *> PMACParser::ProgramContext::line() {
@@ -113,7 +113,7 @@ PMACParser::ProgramContext* PMACParser::program() {
       _la = _input->LA(1);
     }
     setState(54);
-    match(PMACParser::EOF);
+    match(PMACParser::EOF_ANT);
    
   }
   catch (RecognitionException &e) {
@@ -1120,7 +1120,7 @@ PMACParser::DataContext* PMACParser::data() {
     setState(161);
     _errHandler->sync(this);
     switch (_input->LA(1)) {
-      case PMACParser::EOF: {
+      case PMACParser::EOF_ANT: {
         enterOuterAlt(_localctx, 1);
         setState(156);
         constant();

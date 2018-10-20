@@ -20,7 +20,7 @@ namespace antlr4 {
     /// and did not follow it despite needing to.
     static const size_t EPSILON = static_cast<size_t>(-2);
     static const size_t MIN_USER_TOKEN_TYPE = 1;
-    static const size_t EOF = IntStream::EOF;
+    static const size_t EOF_ANT = IntStream::EOF_ANT;
 
     virtual ~Token();
 

@@ -124,9 +124,9 @@
 
 // We have to undefine this symbol as ANTLR will use this name for own members and even
 // generated functions. Because EOF is a global macro we cannot use e.g. a namespace scope to disambiguate.
-#ifdef EOF
-#undef EOF
-#endif
+//#ifdef EOF
+//#undef EOF
+//#endif
 
-#define INVALID_INDEX std::numeric_limits<size_t>::max()
+#define INVALID_INDEX (std::numeric_limits<size_t>::max)()
 template<class T> using Ref = std::shared_ptr<T>;
