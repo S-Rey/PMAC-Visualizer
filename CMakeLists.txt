@@ -51,6 +51,7 @@ if (NOT CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
     set (flags_1 "-Wno-overloaded-virtual")
 else()
     set (flags_1 "-MP /wd4251")
+    add_defenitions(-DNOMINMAX) # Remove the imported def of windows.h
 endif()
 
 add_executable(PMAC-Visualizer
