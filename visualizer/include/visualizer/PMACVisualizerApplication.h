@@ -7,10 +7,6 @@
 #include <nanogui/textbox.h>
 #include <nanogui/glcanvas.h>
 
-#include <visualizer/grid.h>
-
-// Used to get std::vector<moveCmds>
-#include <interpreter/lazer.h>
 
 
 #if defined(__GNUC__)
@@ -31,6 +27,10 @@
 #  include <windows.h>
 #endif
 
+#include <visualizer/grid.h>
+
+// Used to get std::vector<moveCmds>
+#include <interpreter/lazer.h>
 
 
 class PMACVisualizerApplication : public nanogui::Screen {
