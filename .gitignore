@@ -12,3 +12,6 @@ visualizer/cmake-build-debug/
 visualizer/build/
 visualizer/compile_commands.json
 visualizer/ext/nanogui
+
+# JSON Compile command
+compile_commands.json

@@ -6,27 +6,27 @@ PMACVisualizerApplication::PMACVisualizerApplication() : nanogui::Screen(Eigen::
     m_panel = new Widget(this);
     m_panel->setLayout(new BoxLayout(Orientation::Horizontal, Alignment::Middle, 10, 10));
 
-    new Label(m_panel, "Time : ", "sans-bold");
-    m_slider = new Slider(m_panel);
-    m_slider->setValue(0.f);
-    m_slider->setFixedWidth(Screen::width() - 140);
+    //new Label(m_panel, "Time : ", "sans-bold");
+    //m_slider = new Slider(m_panel);
+    //m_slider->setValue(0.f);
+    //m_slider->setFixedWidth(Screen::width() - 140);
 
-    m_textBox = new TextBox(m_panel);
-    m_textBox->setFixedSize(Vector2i(60, 25));
-    m_textBox->setValue("0");
-    m_textBox->setUnits("µs");
+    //m_textBox = new TextBox(m_panel);
+    //m_textBox->setFixedSize(Vector2i(60, 25));
+    //m_textBox->setValue("0");
+    //m_textBox->setUnits("µs");
 
-    m_slider->setCallback([this](float value) {
-        m_textBox->setValue(std::to_string((int) (value)));
-        m_time = value * m_totalTime;
-        mModel.rotation = rotate(Vector3f::UnitX(), m_time);
-        mModel.update();
-        updateMVP();
-    });
-    m_slider->setFinalCallback([&](float value) {
-        //std::cout << "Final m_slider value: " << (int) (value * 100) << std::endl;
-        m_textBox->setValue(std::to_string((int) (value)));
-    });
+    //m_slider->setCallback([this](float value) {
+    //    m_textBox->setValue(std::to_string((int) (value)));
+    //    m_time = value * m_totalTime;
+    //    mModel.rotation = rotate(Vector3f::UnitX(), m_time);
+    //    mModel.update();
+    //    updateMVP();
+    //});
+    //m_slider->setFinalCallback([&](float value) {
+    //    //std::cout << "Final m_slider value: " << (int) (value * 100) << std::endl;
+    //    m_textBox->setValue(std::to_string((int) (value)));
+    //});
 
     m_panel->setSize(Vector2i(Screen::width() - 200 ,50));
     m_panel->setPosition(
@@ -180,7 +180,7 @@ void PMACVisualizerApplication::draw(NVGcontext *ctx) {
 
 // Handle the resizing of the window to change the perspective matrix
 bool PMACVisualizerApplication::resizeEvent(const nanogui::Vector2i& size){
-    m_slider->setFixedWidth(Screen::width() - 140);
+    //m_slider->setFixedWidth(Screen::width() - 140);
     m_panel->setSize(nanogui::Vector2i(Screen::width() - 200 ,50));
     m_panel->setPosition(nanogui::Vector2i(0, mSize.y() - m_panel->size().y()));
     performLayout();

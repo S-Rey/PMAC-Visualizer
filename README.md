@@ -95,3 +95,27 @@ cmake --build . --config Release
 After that copy input.PMAC in the folder where the executable has been created.
 Then simply run it.
 
+### Example of running visualizer
+input.PMAC:
+```
+ABS(X, Y, Z); Absolute coordinate system
+
+M32 = 1; Lazer on
+X(1) Y(1) Z(1)
+X(1) Y(1) Z(-1)
+X(1) Y(-1) Z(1)
+X(1) Y(-1) Z(-1)
+X(1) Y(1) Z(1)
+
+
+X(1) Y(1) Z(1)
+X(1) Y(1) Z(-1)
+X(-1) Y(1) Z(-1)
+X(-1) Y(1) Z(1)
+X(1) Y(1) Z(1)
+
+```
+<p align="center">
+  <img src="images/visualizer1.png" width="400"/>
+</p>
+
