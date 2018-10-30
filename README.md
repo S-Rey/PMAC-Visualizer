@@ -78,7 +78,7 @@ cmake .. && make
 
 ### For Windows user
 
-Install and configure Git, Visual Studio and Cmake. Once done, configure Cmake in order to be able to use it in Powershell.
+Install and configure Git, Visual Studio and CMake. Once done, configure CMake in order to be able to use it in Powershell.
 
 Go to the cloned directory and execute the following commands
 ```
