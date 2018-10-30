@@ -24,17 +24,3 @@ make
 # open the "Antlr-cpp-tutorial.sln" file with Visual Studio generate by CMake inside the build directory
 # build and run the project antlr-tutorial (do not select the auto-generated ALL_BUILD)
 ```
-
-Changes to apply to files for compiling for Windows (As Microsoft does not follow some C++ standards)
- - Visitor.h    (For M_PI)
-    ```
-    #define _USE_MATH_DEFINES
-    ```
-    at the beginning of the includes
-
- - Visitor.h    (For std::toupper)
-    ```
-    #include <ctype.h> 
-    ```
-    and change std::toupper(c) to toupper(c) in the Environment::setVariable() function,
-    in the Environment.cpp file.
