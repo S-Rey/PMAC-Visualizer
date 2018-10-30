@@ -11,3 +11,4 @@ visualizer/.idea/
 visualizer/cmake-build-debug/
 visualizer/build/
 visualizer/compile_commands.json
+visualizer/ext/nanogui
